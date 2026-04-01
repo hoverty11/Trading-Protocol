@@ -9,45 +9,36 @@
 <title>Protocol</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{
-  background:#0d0d0d;color:#e8e8e8;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  min-height:100vh;min-height:100dvh;
-  display:flex;flex-direction:column;overflow-x:hidden;
-}
+body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden;}
 .view{display:none;flex-direction:column;flex:1;overflow-y:auto;}
 .view.active{display:flex;}
-
-/* NAV */
 .nav{display:flex;border-bottom:1px solid #1e1e1e;background:#0d0d0d;position:sticky;top:0;z-index:10;flex-shrink:0;}
 .nav-btn{flex:1;padding:14px 4px;background:none;border:none;color:#555;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;}
 .nav-btn.active{color:#e8e8e8;border-bottom-color:#e8e8e8;}
-
-/* SESSION BAR */
 .sbar{background:#111;border-bottom:1px solid #1e1e1e;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
 .sbar-left{display:flex;flex-direction:column;gap:1px;}
 .sbar-lbl{font-size:10px;color:#444;letter-spacing:0.12em;text-transform:uppercase;}
 .sbar-time{font-size:20px;font-weight:300;color:#e8e8e8;font-variant-numeric:tabular-nums;}
-.sbar-next{font-size:11px;color:#333;}
+.sbar-next{font-size:11px;color:#555;}
 .end-btn{padding:9px 16px;border-radius:8px;border:1.5px solid #ff4444;background:none;font-size:12px;font-weight:600;cursor:pointer;color:#ff4444;white-space:nowrap;}
 .end-btn:active{background:#1a0f0f;}
 
 /* NUDGE */
-.nudge-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:20px;}
+.nudge-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:22px;}
 .nudge-overlay.active{display:flex;}
-.nudge-title{font-size:24px;font-weight:300;color:#e8e8e8;text-align:center;}
+.nudge-title{font-size:26px;font-weight:300;color:#e8e8e8;text-align:center;}
 .nudge-sub{font-size:14px;color:#555;text-align:center;line-height:1.7;max-width:280px;}
 .breath-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
-.breath-circ{width:72px;height:72px;border-radius:50%;background:#111;border:1.5px solid #2a2a2a;animation:breathe 4s ease-in-out infinite;}
-@keyframes breathe{0%,100%{transform:scale(1);border-color:#2a2a2a;}50%{transform:scale(1.35);border-color:#00c896;}}
+.breath-circ{width:80px;height:80px;border-radius:50%;background:#111;border:1.5px solid #2a2a2a;animation:breathe 4s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);border-color:#2a2a2a;}50%{transform:scale(1.4);border-color:#00c896;}}
 .breath-lbl{font-size:11px;color:#444;letter-spacing:0.12em;text-transform:uppercase;}
-.nudge-qs{width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;}
-.nudge-ql{font-size:12px;color:#444;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.nudge-qs{width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;}
+.nudge-ql{font-size:12px;color:#444;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px;}
 .nudge-yn{display:flex;gap:8px;}
-.nyn{flex:1;padding:13px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:13px;font-weight:600;cursor:pointer;color:#555;transition:background 0.15s,border-color 0.15s,color 0.15s;}
+.nyn{flex:1;padding:14px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:14px;font-weight:600;cursor:pointer;color:#555;transition:background 0.15s,border-color 0.15s,color 0.15s;}
 .nyn.ys{background:#0d1a0f;border-color:#00c896;color:#00c896;}
 .nyn.ns{background:#1a0f0f;border-color:#ff4444;color:#ff4444;}
-.nudge-dismiss{width:100%;max-width:320px;padding:16px;border-radius:10px;border:none;background:#1e1e1e;color:#555;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.nudge-dismiss{width:100%;max-width:320px;padding:17px;border-radius:10px;border:none;background:#1e1e1e;color:#555;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.15s,color 0.15s;}
 .nudge-dismiss.go{background:#00c896;color:#000;}
 
 /* SHARED */
@@ -68,15 +59,8 @@ body{
 .pre-title{font-size:26px;font-weight:300;color:#e8e8e8;letter-spacing:-0.01em;}
 .pre-sub{font-size:13px;color:#444;line-height:1.6;}
 .mantra{background:#111;border:1px solid #1e1e1e;border-left:3px solid #ff4444;border-radius:0 8px 8px 0;padding:14px 16px;font-size:13px;color:#aa6666;line-height:1.6;font-style:italic;}
-
-/* SESSION TYPE */
 .sess-type-row{display:flex;gap:8px;}
-.stype-btn{
-  flex:1;padding:14px 6px;border-radius:10px;border:1.5px solid #1e1e1e;
-  background:#111;cursor:pointer;text-align:center;
-  transition:background 0.15s,border-color 0.15s;
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-}
+.stype-btn{flex:1;padding:14px 6px;border-radius:10px;border:1.5px solid #1e1e1e;background:#111;cursor:pointer;text-align:center;transition:background 0.15s,border-color 0.15s;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .stype-icon{font-size:22px;}
 .stype-label{font-size:12px;font-weight:600;color:#555;transition:color 0.15s;}
 .stype-sub{font-size:10px;color:#333;transition:color 0.15s;}
@@ -89,8 +73,6 @@ body{
 .stype-btn.sel-other{background:#161616;border-color:#555;}
 .stype-btn.sel-other .stype-label{color:#aaa;}
 .stype-btn.sel-other .stype-sub{color:#444;}
-
-/* CHECKLIST */
 .checklist{display:flex;flex-direction:column;gap:8px;}
 .chk-item{display:flex;align-items:center;gap:12px;background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:13px 14px;cursor:pointer;transition:background 0.15s,border-color 0.15s;user-select:none;}
 .chk-item.done{background:#0d1a0f;border-color:#1a3020;}
@@ -98,8 +80,6 @@ body{
 .chk-item.done .chk-box{background:#00c896;border-color:#00c896;color:#000;}
 .chk-txt{font-size:14px;color:#ccc;line-height:1.3;}
 .chk-item.done .chk-txt{color:#4a7a5e;}
-
-/* MOOD */
 .mood-row{display:flex;gap:8px;}
 .mood-btn{flex:1;padding:12px 4px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:12px;font-weight:600;cursor:pointer;color:#555;text-align:center;transition:background 0.15s,border-color 0.15s,color 0.15s;display:flex;flex-direction:column;align-items:center;gap:4px;}
 .mood-btn .mi{font-size:20px;}
@@ -153,7 +133,7 @@ body{
 .hempty{flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;color:#333;text-align:center;line-height:1.8;}
 .sess-card{background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;}
 .sess-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.sess-top-left{display:flex;flex-direction:column;gap:2px;}
+.sess-top-left{display:flex;flex-direction:column;gap:3px;}
 .sess-date{font-size:12px;color:#444;}
 .sess-type-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;align-self:flex-start;}
 .stb-am{background:#0d1218;color:#4a9eff;}
@@ -213,30 +193,20 @@ body{
   </div>
   <div class="wrap">
     <div class="mantra">"Skip the protocol and tomorrow I feel sick — time wasted, money gone, that doubt creeping back. Is it worth it?"</div>
-
-    <!-- SESSION TYPE -->
     <div>
       <div class="sec-lbl">Which session?</div>
       <div class="sess-type-row">
         <button class="stype-btn" id="st-am" onclick="setSessionType('am')">
-          <span class="stype-icon">🌅</span>
-          <span class="stype-label">AM</span>
-          <span class="stype-sub">Open session</span>
+          <span class="stype-icon">🌅</span><span class="stype-label">AM</span><span class="stype-sub">Open session</span>
         </button>
         <button class="stype-btn" id="st-ph" onclick="setSessionType('ph')">
-          <span class="stype-icon">⚡</span>
-          <span class="stype-label">Power Hour</span>
-          <span class="stype-sub">3–4pm</span>
+          <span class="stype-icon">⚡</span><span class="stype-label">Power Hour</span><span class="stype-sub">3–4pm</span>
         </button>
         <button class="stype-btn" id="st-other" onclick="setSessionType('other')">
-          <span class="stype-icon">📍</span>
-          <span class="stype-label">Other</span>
-          <span class="stype-sub">Midday etc.</span>
+          <span class="stype-icon">📍</span><span class="stype-label">Other</span><span class="stype-sub">Midday etc.</span>
         </button>
       </div>
     </div>
-
-    <!-- CHECKLIST -->
     <div>
       <div class="sec-lbl">Pre-trade checklist</div>
       <div class="checklist">
@@ -247,26 +217,17 @@ body{
         <div class="chk-item" id="ck4" onclick="toggleChk(4)"><div class="chk-box" id="cb4"></div><div class="chk-txt">Read today's non-negotiables</div></div>
       </div>
     </div>
-
-    <!-- MOOD -->
     <div>
       <div class="sec-lbl">How are you feeling?</div>
       <div class="mood-row">
-        <button class="mood-btn" id="mood-sharp" onclick="setMood('sharp')">
-          <span class="mi">🎯</span><span>Sharp</span>
-        </button>
-        <button class="mood-btn" id="mood-ok" onclick="setMood('ok')">
-          <span class="mi">😐</span><span>OK</span>
-        </button>
-        <button class="mood-btn" id="mood-off" onclick="setMood('off')">
-          <span class="mi">⚡</span><span>Off / Rushed</span>
-        </button>
+        <button class="mood-btn" id="mood-sharp" onclick="setMood('sharp')"><span class="mi">🎯</span><span>Sharp</span></button>
+        <button class="mood-btn" id="mood-ok" onclick="setMood('ok')"><span class="mi">😐</span><span>OK</span></button>
+        <button class="mood-btn" id="mood-off" onclick="setMood('off')"><span class="mi">⚡</span><span>Off / Rushed</span></button>
       </div>
       <div id="mood-warning" style="display:none;margin-top:10px;padding:12px 14px;background:#1a0f0f;border:1px solid #2a1515;border-radius:8px;font-size:12px;color:#884444;line-height:1.6;">
         You're feeling off or rushed. Highest-confluence setups only today — or sit it out.
       </div>
     </div>
-
     <div style="margin-top:auto;padding-top:8px;">
       <button class="big-btn dim" id="startBtn" onclick="startSession()">I'm Ready to Trade</button>
     </div>
@@ -282,7 +243,7 @@ body{
   </nav>
   <div class="sbar">
     <div class="sbar-left">
-      <div class="sbar-lbl" id="sbarLbl">AM Session running</div>
+      <div class="sbar-lbl" id="sbarLbl">Session running</div>
       <div class="sbar-time" id="sbarTime">00:00</div>
       <div class="sbar-next" id="sbarNext">Nudge in 15:00</div>
     </div>
@@ -367,329 +328,379 @@ body{
 <div class="view" id="view-history">
   <div style="padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
     <div style="font-size:16px;font-weight:500;color:#e8e8e8;">History</div>
-    <button onclick="showPre()" style="background:none;border:1px solid #1e1e1e;border-radius:6px;padding:6px 14px;color:#00c896;font-size:12px;font-weight:600;cursor:pointer;border-color:#1a3020;">+ New Session</button>
+    <button onclick="showPre()" style="background:none;border:1px solid #1a3020;border-radius:6px;padding:6px 14px;color:#00c896;font-size:12px;font-weight:600;cursor:pointer;">+ New Session</button>
   </div>
   <div class="hwrap" id="hwrap-main"></div>
 </div>
 
 <script>
-// STATE
-let sessStart=null,sessClk=null,nudgeInt=null,nextNudge=null;
-let sessionMood=null,sessionType=null,sessionGrade=null;
-let chkDone=[false,false,false,false,false];
-let stepDone=[false,false,false,false];
-let tInt=null,tSecs=300,tState='idle';
-const ans={1:null,2:null,3:null,4:null};
-const na={1:null,2:null};
-const NUDGE=15*60*1000;
+// ── STATE ──────────────────────────────────────────────
+var sessStart=null, masterClk=null;
+var sessionMood=null, sessionType=null, sessionGrade=null;
+var chkDone=[false,false,false,false,false];
+var stepDone=[false,false,false,false];
+var tInt=null, tSecs=300, tState='idle';
+var ans={1:null,2:null,3:null,4:null};
+var na={1:null,2:null};
 
-const TYPE_LABELS={am:'AM',ph:'Power Hour',other:'Other'};
-const TYPE_BADGE={am:'stb-am',ph:'stb-ph',other:'stb-other'};
-const GRADE_CLASS={A:'sg-a',B:'sg-b',C:'sg-c',D:'sg-d'};
+// Nudge state
+var NUDGE_MS = 15 * 60 * 1000; // 15 minutes
+var nextNudgeAt = null;
+var nudgeShowing = false;
 
-// VIEW ROUTING
-function showView(id){
-  document.querySelectorAll('.view[id^="view-"]').forEach(v=>v.classList.remove('active'));
+var TYPE_LABELS={am:'AM',ph:'Power Hour',other:'Other'};
+var TYPE_BADGE={am:'stb-am',ph:'stb-ph',other:'stb-other'};
+var GRADE_CLASS={A:'sg-a',B:'sg-b',C:'sg-c',D:'sg-d'};
+
+// ── MASTER TICK (runs every second while session active) ──
+function masterTick() {
+  if (!sessStart) return;
+
+  // Session clock
+  var e = Math.floor((Date.now() - sessStart) / 1000);
+  var m = Math.floor(e / 60), s = e % 60;
+  document.getElementById('sbarTime').textContent =
+    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+
+  // Nudge countdown
+  if (nextNudgeAt) {
+    var left = Math.max(0, Math.round((nextNudgeAt - Date.now()) / 1000));
+    var nm = Math.floor(left / 60), ns = left % 60;
+    document.getElementById('sbarNext').textContent =
+      'Nudge in ' + nm + ':' + String(ns).padStart(2,'0');
+
+    // Fire nudge when countdown hits zero
+    if (left === 0 && !nudgeShowing) {
+      showNudge();
+    }
+  }
+}
+
+// ── VIEW ROUTING ───────────────────────────────────────
+function showView(id) {
+  document.querySelectorAll('.view[id^="view-"]').forEach(function(v){v.classList.remove('active');});
   document.getElementById('view-'+id).classList.add('active');
 }
-function showPre(){showView('pre');}
-function showHistoryView(){renderHistory('hwrap-main');showView('history');}
+function showPre() { showView('pre'); }
+function showHistoryView() { renderHistory('hwrap-main'); showView('history'); }
 
-// TAB SWITCHING
-function showTab(name,btn){
-  ['protocol','checkin','history'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+function showTab(name, btn) {
+  ['protocol','checkin','history'].forEach(function(t){
+    document.getElementById('tab-'+t).classList.remove('active');
+  });
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
-  if(name==='history') renderHistory('hwrap-sess');
+  if (name==='history') renderHistory('hwrap-sess');
 }
 
-// SESSION TYPE
-function setSessionType(t){
-  sessionType=t;
-  ['am','ph','other'].forEach(x=>{
-    document.getElementById('st-'+x).className='stype-btn'+(t===x?' sel-'+x:'');
+// ── PRE-TRADE ──────────────────────────────────────────
+function setSessionType(t) {
+  sessionType = t;
+  ['am','ph','other'].forEach(function(x){
+    document.getElementById('st-'+x).className = 'stype-btn' + (t===x ? ' sel-'+x : '');
   });
   checkPreReady();
 }
 
-// CHECKLIST
-function toggleChk(i){
-  chkDone[i]=!chkDone[i];
-  document.getElementById('ck'+i).classList.toggle('done',chkDone[i]);
-  document.getElementById('cb'+i).textContent=chkDone[i]?'✓':'';
+function toggleChk(i) {
+  chkDone[i] = !chkDone[i];
+  document.getElementById('ck'+i).classList.toggle('done', chkDone[i]);
+  document.getElementById('cb'+i).textContent = chkDone[i] ? '✓' : '';
   checkPreReady();
 }
 
-// MOOD
-function setMood(m){
-  sessionMood=m;
-  ['sharp','ok','off'].forEach(x=>document.getElementById('mood-'+x).className='mood-btn'+(m===x?' sel-'+x:''));
-  document.getElementById('mood-warning').style.display=m==='off'?'block':'none';
+function setMood(m) {
+  sessionMood = m;
+  ['sharp','ok','off'].forEach(function(x){
+    document.getElementById('mood-'+x).className = 'mood-btn' + (m===x ? ' sel-'+x : '');
+  });
+  document.getElementById('mood-warning').style.display = m==='off' ? 'block' : 'none';
   checkPreReady();
 }
 
-function checkPreReady(){
-  const ready=chkDone.every(Boolean)&&!!sessionMood&&!!sessionType;
-  document.getElementById('startBtn').className='big-btn '+(ready?'green':'dim');
+function checkPreReady() {
+  var ready = chkDone.every(Boolean) && !!sessionMood && !!sessionType;
+  document.getElementById('startBtn').className = 'big-btn ' + (ready ? 'green' : 'dim');
 }
 
-// START SESSION
-function startSession(){
-  if(!chkDone.every(Boolean)||!sessionMood||!sessionType){
-    alert('Choose a session type, complete the checklist, and set your mindset first.');return;
+// ── START SESSION ──────────────────────────────────────
+function startSession() {
+  if (!chkDone.every(Boolean) || !sessionMood || !sessionType) {
+    alert('Choose a session type, complete the checklist, and set your mindset first.');
+    return;
   }
-  sessStart=Date.now();nextNudge=Date.now()+NUDGE;
-  const typeLabel=TYPE_LABELS[sessionType];
-  document.getElementById('sbarLbl').textContent=typeLabel+' session running';
+  sessStart = Date.now();
+  nextNudgeAt = Date.now() + NUDGE_MS;
+  nudgeShowing = false;
+
+  var typeLabel = TYPE_LABELS[sessionType];
+  document.getElementById('sbarLbl').textContent = typeLabel + ' session running';
+
   showView('session');
-  sessClk=setInterval(tickSession,1000);
-  nudgeInt=setInterval(fireNudge,NUDGE);
-  tickSession();
+
+  // Single master interval — polls every second
+  if (masterClk) clearInterval(masterClk);
+  masterClk = setInterval(masterTick, 1000);
+  masterTick(); // run immediately
 }
 
-// SESSION CLOCK
-function tickSession(){
-  if(!sessStart)return;
-  const e=Math.floor((Date.now()-sessStart)/1000);
-  const m=Math.floor(e/60),s=e%60;
-  document.getElementById('sbarTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  if(nextNudge){
-    const left=Math.max(0,Math.round((nextNudge-Date.now())/1000));
-    const nm=Math.floor(left/60),ns=left%60;
-    document.getElementById('sbarNext').textContent='Nudge in '+nm+':'+String(ns).padStart(2,'0');
-  }
-}
+// ── NUDGE ──────────────────────────────────────────────
+function showNudge() {
+  nudgeShowing = true;
+  nextNudgeAt = Date.now() + NUDGE_MS; // schedule next nudge immediately
 
-// NUDGE
-function fireNudge(){
-  nextNudge=Date.now()+NUDGE;
-  na[1]=null;na[2]=null;
-  ['nq1y','nq1n','nq2y','nq2n'].forEach(id=>document.getElementById(id).className='nyn');
-  document.getElementById('nudgeDismiss').className='nudge-dismiss';
-  document.getElementById('nudgeOverlay').classList.add('active');
-  vibe([100,50,100,50,200]);tone();
-}
-function setNA(q,v){
-  na[q]=v;
-  if(q===1){
-    document.getElementById('nq1y').className='nyn'+(v==='y'?' ys':'');
-    document.getElementById('nq1n').className='nyn'+(v==='n'?' ns':'');
-  } else {
-    document.getElementById('nq2y').className='nyn'+(v==='y'?' ns':'');
-    document.getElementById('nq2n').className='nyn'+(v==='n'?' ys':'');
-  }
-  if(na[1]&&na[2]) document.getElementById('nudgeDismiss').className='nudge-dismiss go';
-}
-function dismissNudge(){
-  document.getElementById('nudgeOverlay').classList.remove('active');
-  if(na[2]==='y') setTimeout(()=>alert('You said you\'re forcing it.\nStep back. Wait for your setup.'),300);
-  if(na[1]||na[2]){
-    const log=JSON.parse(localStorage.getItem('nlog')||'[]');
-    log.unshift({ts:Date.now(),rules:na[1],forcing:na[2]});
-    localStorage.setItem('nlog',JSON.stringify(log));
-  }
-}
-
-// PROTOCOL STEPS
-function toggleStep(i){
-  stepDone[i]=!stepDone[i];
-  document.getElementById('s'+i).classList.toggle('done',stepDone[i]);
-  document.getElementById('sc'+i).textContent=stepDone[i]?'✓':i+1;
-}
-
-// LOSS TIMER
-function handleTimer(){tState==='running'?resetLossTimer():startLossTimer();}
-function startLossTimer(){
-  tSecs=300;tState='running';
-  document.getElementById('tbtn').textContent='Reset';
-  document.getElementById('tbtn').className='tbtn reset';
-  document.getElementById('tsub').textContent='do not watch the chart';
-  document.getElementById('tnum').className='tnum run';
-  const ring=document.getElementById('tring');
-  tInt=setInterval(()=>{
-    tSecs--;
-    const m=Math.floor(tSecs/60),s=tSecs%60;
-    document.getElementById('tnum').textContent=m+':'+String(s).padStart(2,'0');
-    ring.style.strokeDashoffset=376.99-(376.99*(1-tSecs/300));
-    if(tSecs<=0){
-      clearInterval(tInt);tState='done';
-      document.getElementById('tnum').textContent='Done';
-      document.getElementById('tnum').className='tnum done';
-      document.getElementById('tsub').textContent='full confluence only';
-      document.getElementById('tbtn').textContent='Reset';
-      document.getElementById('tbtn').className='tbtn ready';
-      ring.style.stroke='#00c896';ring.style.strokeDashoffset='0';
-      vibe([200,100,200]);tone();
-    }
-  },1000);
-}
-function resetLossTimer(){
-  clearInterval(tInt);tState='idle';tSecs=300;
-  document.getElementById('tnum').textContent='5:00';
-  document.getElementById('tnum').className='tnum';
-  document.getElementById('tsub').textContent='ready';
-  document.getElementById('tbtn').textContent='Start Timer';
-  document.getElementById('tbtn').className='tbtn start';
-  const ring=document.getElementById('tring');
-  ring.style.stroke='#ff4444';ring.style.strokeDashoffset='376.99';
-}
-
-// TRADE CHECK-IN
-function setA(q,v){
-  ans[q]=v;
-  const map={1:['q1y','q1n'],2:['q2y','q2n'],3:['q3y','q3n'],4:['q4w','q4l','q4b']};
-  map[q].forEach(id=>{
-    const sel=id.endsWith(v);
-    let cls='ynb';
-    if(sel) cls+=(q===4?(v==='w'?' ys':' ns'):(v==='y'?' ys':' ns'));
-    document.getElementById(id).className=cls;
+  // Reset nudge UI
+  na[1] = null; na[2] = null;
+  ['nq1y','nq1n','nq2y','nq2n'].forEach(function(id){
+    document.getElementById(id).className = 'nyn';
   });
-  document.getElementById('svbtn').className='big-btn '+(ans[1]&&ans[2]&&ans[3]&&ans[4]?'green':'dim');
-}
-function saveCheckin(){
-  if(!ans[1]||!ans[2]||!ans[3]||!ans[4])return;
-  const log=JSON.parse(localStorage.getItem('plog')||'[]');
-  log.unshift({ts:Date.now(),sessStart,waited:ans[1],cooldown:ans[2],ran:ans[3],outcome:ans[4]});
-  localStorage.setItem('plog',JSON.stringify(log));
-  [1,2,3,4].forEach(q=>ans[q]=null);
-  ['q1y','q1n','q2y','q2n','q3y','q3n','q4w','q4l','q4b'].forEach(id=>document.getElementById(id).className='ynb');
-  document.getElementById('svbtn').className='big-btn dim';
-  showTab('protocol',document.getElementById('nb-protocol'));
+  document.getElementById('nudgeDismiss').className = 'nudge-dismiss';
+  document.getElementById('nudgeOverlay').classList.add('active');
+
+  vibe([100,50,100,50,200]);
+  tone();
 }
 
-// END SESSION
-function goEndSession(){
-  clearInterval(sessClk);clearInterval(nudgeInt);
-  const dur=Math.floor((Date.now()-sessStart)/1000);
-  const m=Math.floor(dur/60),s=dur%60;
-  const log=JSON.parse(localStorage.getItem('plog')||'[]');
-  const today=log.filter(r=>r.sessStart===sessStart);
-  const typeLabel=TYPE_LABELS[sessionType]||'Session';
-  document.getElementById('endMeta').textContent=
-    typeLabel+' · '+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+' · '+today.length+' trade'+(today.length!==1?'s':'')+' logged';
-  sessionGrade=null;
-  document.getElementById('fixNote').value='';
-  ['A','B','C','D'].forEach(g=>document.getElementById('g'+g.toLowerCase()).className='grade-btn');
-  document.getElementById('saveEndBtn').className='big-btn dim';
-  document.getElementById('saveEndBtn').style.display='block';
-  document.getElementById('finishBtn').style.display='none';
+function setNA(q, v) {
+  na[q] = v;
+  if (q===1) {
+    document.getElementById('nq1y').className = 'nyn' + (v==='y' ? ' ys' : '');
+    document.getElementById('nq1n').className = 'nyn' + (v==='n' ? ' ns' : '');
+  } else {
+    document.getElementById('nq2y').className = 'nyn' + (v==='y' ? ' ns' : '');
+    document.getElementById('nq2n').className = 'nyn' + (v==='n' ? ' ys' : '');
+  }
+  if (na[1] && na[2]) document.getElementById('nudgeDismiss').className = 'nudge-dismiss go';
+}
+
+function dismissNudge() {
+  nudgeShowing = false;
+  document.getElementById('nudgeOverlay').classList.remove('active');
+  if (na[2]==='y') {
+    setTimeout(function(){
+      alert('You said you\'re forcing it.\nStep back. Wait for your setup.');
+    }, 300);
+  }
+  if (na[1] || na[2]) {
+    var log = JSON.parse(localStorage.getItem('nlog') || '[]');
+    log.unshift({ts: Date.now(), rules: na[1], forcing: na[2]});
+    localStorage.setItem('nlog', JSON.stringify(log));
+  }
+}
+
+// ── PROTOCOL STEPS ─────────────────────────────────────
+function toggleStep(i) {
+  stepDone[i] = !stepDone[i];
+  document.getElementById('s'+i).classList.toggle('done', stepDone[i]);
+  document.getElementById('sc'+i).textContent = stepDone[i] ? '✓' : i+1;
+}
+
+// ── LOSS TIMER ─────────────────────────────────────────
+function handleTimer() {
+  tState === 'running' ? resetLossTimer() : startLossTimer();
+}
+
+function startLossTimer() {
+  tSecs = 300; tState = 'running';
+  document.getElementById('tbtn').textContent = 'Reset';
+  document.getElementById('tbtn').className = 'tbtn reset';
+  document.getElementById('tsub').textContent = 'do not watch the chart';
+  document.getElementById('tnum').className = 'tnum run';
+  var ring = document.getElementById('tring');
+  if (tInt) clearInterval(tInt);
+  tInt = setInterval(function(){
+    tSecs--;
+    var m = Math.floor(tSecs/60), s = tSecs%60;
+    document.getElementById('tnum').textContent = m + ':' + String(s).padStart(2,'0');
+    ring.style.strokeDashoffset = 376.99 - (376.99 * (1 - tSecs/300));
+    if (tSecs <= 0) {
+      clearInterval(tInt); tState = 'done';
+      document.getElementById('tnum').textContent = 'Done';
+      document.getElementById('tnum').className = 'tnum done';
+      document.getElementById('tsub').textContent = 'full confluence only';
+      document.getElementById('tbtn').textContent = 'Reset';
+      document.getElementById('tbtn').className = 'tbtn ready';
+      ring.style.stroke = '#00c896';
+      ring.style.strokeDashoffset = '0';
+      vibe([200,100,200]); tone();
+    }
+  }, 1000);
+}
+
+function resetLossTimer() {
+  if (tInt) clearInterval(tInt);
+  tState = 'idle'; tSecs = 300;
+  document.getElementById('tnum').textContent = '5:00';
+  document.getElementById('tnum').className = 'tnum';
+  document.getElementById('tsub').textContent = 'ready';
+  document.getElementById('tbtn').textContent = 'Start Timer';
+  document.getElementById('tbtn').className = 'tbtn start';
+  var ring = document.getElementById('tring');
+  ring.style.stroke = '#ff4444';
+  ring.style.strokeDashoffset = '376.99';
+}
+
+// ── TRADE CHECK-IN ─────────────────────────────────────
+function setA(q, v) {
+  ans[q] = v;
+  var map = {1:['q1y','q1n'],2:['q2y','q2n'],3:['q3y','q3n'],4:['q4w','q4l','q4b']};
+  map[q].forEach(function(id){
+    var sel = id.endsWith(v);
+    var cls = 'ynb';
+    if (sel) cls += (q===4 ? (v==='w' ? ' ys' : ' ns') : (v==='y' ? ' ys' : ' ns'));
+    document.getElementById(id).className = cls;
+  });
+  document.getElementById('svbtn').className = 'big-btn ' + (ans[1]&&ans[2]&&ans[3]&&ans[4] ? 'green' : 'dim');
+}
+
+function saveCheckin() {
+  if (!ans[1]||!ans[2]||!ans[3]||!ans[4]) return;
+  var log = JSON.parse(localStorage.getItem('plog') || '[]');
+  log.unshift({ts:Date.now(), sessStart:sessStart, waited:ans[1], cooldown:ans[2], ran:ans[3], outcome:ans[4]});
+  localStorage.setItem('plog', JSON.stringify(log));
+  [1,2,3,4].forEach(function(q){ans[q]=null;});
+  ['q1y','q1n','q2y','q2n','q3y','q3n','q4w','q4l','q4b'].forEach(function(id){
+    document.getElementById(id).className = 'ynb';
+  });
+  document.getElementById('svbtn').className = 'big-btn dim';
+  showTab('protocol', document.getElementById('nb-protocol'));
+}
+
+// ── END SESSION ────────────────────────────────────────
+function goEndSession() {
+  if (masterClk) clearInterval(masterClk);
+  var dur = Math.floor((Date.now() - sessStart) / 1000);
+  var m = Math.floor(dur/60), s = dur%60;
+  var log = JSON.parse(localStorage.getItem('plog') || '[]');
+  var today = log.filter(function(r){return r.sessStart===sessStart;});
+  var typeLabel = TYPE_LABELS[sessionType] || 'Session';
+  document.getElementById('endMeta').textContent =
+    typeLabel + ' · ' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') +
+    ' · ' + today.length + ' trade' + (today.length!==1?'s':'') + ' logged';
+  sessionGrade = null;
+  document.getElementById('fixNote').value = '';
+  ['A','B','C','D'].forEach(function(g){
+    document.getElementById('g'+g.toLowerCase()).className = 'grade-btn';
+  });
+  document.getElementById('saveEndBtn').className = 'big-btn dim';
+  document.getElementById('saveEndBtn').style.display = 'block';
+  document.getElementById('finishBtn').style.display = 'none';
   showView('end');
 }
 
-function setGrade(g){
-  sessionGrade=g;
-  ['A','B','C','D'].forEach(x=>document.getElementById('g'+x.toLowerCase()).className='grade-btn'+(g===x?' sel-'+x.toLowerCase():''));
-  document.getElementById('saveEndBtn').className='big-btn '+(sessionGrade?'green':'dim');
-}
-
-function saveSession(){
-  if(!sessionGrade)return;
-  const sessions=JSON.parse(localStorage.getItem('sessions')||'[]');
-  const log=JSON.parse(localStorage.getItem('plog')||'[]');
-  const trades=log.filter(r=>r.sessStart===sessStart);
-  sessions.unshift({
-    ts:sessStart,end:Date.now(),
-    type:sessionType,
-    mood:sessionMood,
-    grade:sessionGrade,
-    fix:document.getElementById('fixNote').value.trim(),
-    trades:trades.length,
-    wins:trades.filter(t=>t.outcome==='w').length,
-    losses:trades.filter(t=>t.outcome==='l').length,
-    cooldownOk:trades.filter(t=>t.cooldown==='y').length
+function setGrade(g) {
+  sessionGrade = g;
+  ['A','B','C','D'].forEach(function(x){
+    document.getElementById('g'+x.toLowerCase()).className = 'grade-btn' + (g===x ? ' sel-'+x.toLowerCase() : '');
   });
-  localStorage.setItem('sessions',JSON.stringify(sessions));
-  document.getElementById('saveEndBtn').style.display='none';
-  document.getElementById('finishBtn').style.display='block';
+  document.getElementById('saveEndBtn').className = 'big-btn ' + (sessionGrade ? 'green' : 'dim');
 }
 
-function finishSession(){
-  // reset all state
-  sessStart=null;sessionMood=null;sessionType=null;sessionGrade=null;
-  chkDone=[false,false,false,false,false];
-  stepDone=[false,false,false,false];
-  [0,1,2,3,4].forEach(i=>{
-    const ck=document.getElementById('ck'+i);
-    const cb=document.getElementById('cb'+i);
+function saveSession() {
+  if (!sessionGrade) return;
+  var sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
+  var log = JSON.parse(localStorage.getItem('plog') || '[]');
+  var trades = log.filter(function(r){return r.sessStart===sessStart;});
+  sessions.unshift({
+    ts: sessStart, end: Date.now(),
+    type: sessionType, mood: sessionMood, grade: sessionGrade,
+    fix: document.getElementById('fixNote').value.trim(),
+    trades: trades.length,
+    wins: trades.filter(function(t){return t.outcome==='w';}).length,
+    losses: trades.filter(function(t){return t.outcome==='l';}).length,
+    cooldownOk: trades.filter(function(t){return t.cooldown==='y';}).length
+  });
+  localStorage.setItem('sessions', JSON.stringify(sessions));
+  document.getElementById('saveEndBtn').style.display = 'none';
+  document.getElementById('finishBtn').style.display = 'block';
+}
+
+function finishSession() {
+  // Reset all state
+  sessStart = null; sessionMood = null; sessionType = null; sessionGrade = null;
+  chkDone = [false,false,false,false,false];
+  stepDone = [false,false,false,false];
+  nudgeShowing = false; nextNudgeAt = null;
+  [0,1,2,3,4].forEach(function(i){
+    var ck=document.getElementById('ck'+i), cb=document.getElementById('cb'+i);
     if(ck) ck.classList.remove('done');
     if(cb) cb.textContent='';
   });
-  [0,1,2,3].forEach(i=>{
+  [0,1,2,3].forEach(function(i){
     document.getElementById('s'+i).classList.remove('done');
-    document.getElementById('sc'+i).textContent=i+1;
+    document.getElementById('sc'+i).textContent = i+1;
   });
-  ['am','ph','other'].forEach(x=>document.getElementById('st-'+x).className='stype-btn');
-  ['sharp','ok','off'].forEach(x=>document.getElementById('mood-'+x).className='mood-btn');
-  document.getElementById('mood-warning').style.display='none';
-  document.getElementById('startBtn').className='big-btn dim';
+  ['am','ph','other'].forEach(function(x){document.getElementById('st-'+x).className='stype-btn';});
+  ['sharp','ok','off'].forEach(function(x){document.getElementById('mood-'+x).className='mood-btn';});
+  document.getElementById('mood-warning').style.display = 'none';
+  document.getElementById('startBtn').className = 'big-btn dim';
   resetLossTimer();
   showHistoryView();
 }
 
-// HISTORY
-function renderHistory(cid){
-  const wrap=document.getElementById(cid);
-  if(!wrap)return;
-  const sessions=JSON.parse(localStorage.getItem('sessions')||'[]');
-  if(!sessions.length){
-    wrap.innerHTML='<div class="hempty">No sessions yet.<br>Complete your first session<br>to see history here.</div>';
+// ── HISTORY ────────────────────────────────────────────
+function renderHistory(cid) {
+  var wrap = document.getElementById(cid);
+  if (!wrap) return;
+  var sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
+  if (!sessions.length) {
+    wrap.innerHTML = '<div class="hempty">No sessions yet.<br>Complete your first session<br>to see history here.</div>';
     return;
   }
-  const total=sessions.length;
-  const good=sessions.filter(s=>s.grade==='A'||s.grade==='B').length;
-  const pct=Math.round((good/total)*100);
+  var total = sessions.length;
+  var good = sessions.filter(function(s){return s.grade==='A'||s.grade==='B';}).length;
+  var pct = Math.round((good/total)*100);
 
-  // per-type breakdown
-  const types=['am','ph','other'];
-  let typeBreakdown='';
-  types.forEach(t=>{
-    const ts=sessions.filter(s=>s.type===t);
-    if(!ts.length)return;
-    const tgood=ts.filter(s=>s.grade==='A'||s.grade==='B').length;
-    const tpct=Math.round((tgood/ts.length)*100);
-    typeBreakdown+=`<span>${TYPE_LABELS[t]}: ${tpct}% A/B (${ts.length})</span>`;
+  var typeBreakdown = '';
+  ['am','ph','other'].forEach(function(t){
+    var ts = sessions.filter(function(s){return s.type===t;});
+    if (!ts.length) return;
+    var tgood = ts.filter(function(s){return s.grade==='A'||s.grade==='B';}).length;
+    var tpct = Math.round((tgood/ts.length)*100);
+    typeBreakdown += '<span>' + TYPE_LABELS[t] + ': ' + tpct + '% A/B (' + ts.length + ')</span>';
   });
 
-  let h=`<div class="compliance-box">
-    <div class="c-lbl">A/B execution rate</div>
-    <div class="c-num">${pct}%</div>
-    <div class="c-sub">${good} of ${total} sessions graded A or B</div>
-    <div class="btrack"><div class="bfill" style="width:${pct}%"></div></div>
-    ${typeBreakdown?`<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#444;">${typeBreakdown}</div>`:''}
-  </div>`;
+  var h = '<div class="compliance-box">' +
+    '<div class="c-lbl">A/B execution rate</div>' +
+    '<div class="c-num">' + pct + '%</div>' +
+    '<div class="c-sub">' + good + ' of ' + total + ' sessions graded A or B</div>' +
+    '<div class="btrack"><div class="bfill" style="width:' + pct + '%"></div></div>' +
+    (typeBreakdown ? '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#444;">' + typeBreakdown + '</div>' : '') +
+    '</div>';
 
-  sessions.forEach(s=>{
-    const d=new Date(s.ts);
-    const ds=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
-    const dur=Math.floor((s.end-s.ts)/1000);
-    const dm=Math.floor(dur/60);
-    const moodLabel={sharp:'Sharp 🎯',ok:'OK 😐',off:'Off ⚡'}[s.mood]||'';
-    const cdPct=s.trades>0?Math.round((s.cooldownOk/s.trades)*100):null;
-    const typeBadge=TYPE_BADGE[s.type]||'stb-other';
-    const typeLabel=TYPE_LABELS[s.type]||'Session';
-    h+=`<div class="sess-card">
-      <div class="sess-top">
-        <div class="sess-top-left">
-          <div class="sess-date">${ds} · ${dm}min</div>
-          <span class="sess-type-badge ${typeBadge}">${typeLabel}</span>
-        </div>
-        <span class="sess-grade ${GRADE_CLASS[s.grade]||''}">${s.grade}</span>
-      </div>
-      <div class="sess-meta">
-        <span>${moodLabel}</span>
-        <span>${s.trades} trade${s.trades!==1?'s':''} · ${s.wins}W ${s.losses}L</span>
-        ${cdPct!==null?`<span>Cooldown ${cdPct}%</span>`:''}
-      </div>
-      ${s.fix?`<div class="sess-fix"><span>Fix: </span>${s.fix}</div>`:''}
-    </div>`;
+  sessions.forEach(function(s){
+    var d = new Date(s.ts);
+    var ds = d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+    var dur = Math.floor((s.end-s.ts)/1000);
+    var dm = Math.floor(dur/60);
+    var moodLabel = {sharp:'Sharp 🎯',ok:'OK 😐',off:'Off ⚡'}[s.mood] || '';
+    var cdPct = s.trades>0 ? Math.round((s.cooldownOk/s.trades)*100) : null;
+    var typeBadge = TYPE_BADGE[s.type] || 'stb-other';
+    var typeLabel = TYPE_LABELS[s.type] || 'Session';
+    h += '<div class="sess-card">' +
+      '<div class="sess-top">' +
+        '<div class="sess-top-left">' +
+          '<div class="sess-date">' + ds + ' · ' + dm + 'min</div>' +
+          '<span class="sess-type-badge ' + typeBadge + '">' + typeLabel + '</span>' +
+        '</div>' +
+        '<span class="sess-grade ' + (GRADE_CLASS[s.grade]||'') + '">' + s.grade + '</span>' +
+      '</div>' +
+      '<div class="sess-meta">' +
+        '<span>' + moodLabel + '</span>' +
+        '<span>' + s.trades + ' trade' + (s.trades!==1?'s':'') + ' · ' + s.wins + 'W ' + s.losses + 'L</span>' +
+        (cdPct!==null ? '<span>Cooldown ' + cdPct + '%</span>' : '') +
+      '</div>' +
+      (s.fix ? '<div class="sess-fix"><span>Fix: </span>' + s.fix + '</div>' : '') +
+      '</div>';
   });
-  h+=`<button class="clr-btn" onclick="clearHistory('${cid}')">Clear history</button>`;
-  wrap.innerHTML=h;
+
+  h += '<button class="clr-btn" onclick="clearHistory(\'' + cid + '\')">Clear history</button>';
+  wrap.innerHTML = h;
 }
 
-function clearHistory(cid){
-  if(confirm('Clear all history?')){
+function clearHistory(cid) {
+  if (confirm('Clear all history?')) {
     localStorage.removeItem('sessions');
     localStorage.removeItem('plog');
     localStorage.removeItem('nlog');
@@ -697,18 +708,19 @@ function clearHistory(cid){
   }
 }
 
-function tone(){
-  try{
-    const c=new(window.AudioContext||window.webkitAudioContext)();
-    const o=c.createOscillator(),g=c.createGain();
-    o.connect(g);g.connect(c.destination);
-    o.frequency.value=440;o.type='sine';
-    g.gain.setValueAtTime(0.25,c.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.7);
-    o.start(c.currentTime);o.stop(c.currentTime+0.7);
-  }catch(e){}
+// ── UTILS ──────────────────────────────────────────────
+function tone() {
+  try {
+    var c = new (window.AudioContext || window.webkitAudioContext)();
+    var o = c.createOscillator(), g = c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.frequency.value = 440; o.type = 'sine';
+    g.gain.setValueAtTime(0.25, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.8);
+    o.start(c.currentTime); o.stop(c.currentTime + 0.8);
+  } catch(e) {}
 }
-function vibe(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
+function vibe(p) { try { navigator.vibrate && navigator.vibrate(p); } catch(e) {} }
 </script>
 </body>
 </html>
