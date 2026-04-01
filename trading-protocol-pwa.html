@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a0a">
+<title>Protocol</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+  background:#0d0d0d;color:#e8e8e8;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;overflow-x:hidden;
+}
+.view{display:none;flex-direction:column;flex:1;overflow-y:auto;}
+.view.active{display:flex;}
+
+/* NAV */
+.nav{display:flex;border-bottom:1px solid #1e1e1e;background:#0d0d0d;position:sticky;top:0;z-index:10;flex-shrink:0;}
+.nav-btn{flex:1;padding:14px 4px;background:none;border:none;color:#555;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;}
+.nav-btn.active{color:#e8e8e8;border-bottom-color:#e8e8e8;}
+
+/* SESSION BAR */
+.sbar{background:#111;border-bottom:1px solid #1e1e1e;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
+.sbar-left{display:flex;flex-direction:column;gap:1px;}
+.sbar-lbl{font-size:10px;color:#444;letter-spacing:0.12em;text-transform:uppercase;}
+.sbar-time{font-size:20px;font-weight:300;color:#e8e8e8;font-variant-numeric:tabular-nums;}
+.sbar-next{font-size:11px;color:#333;}
+.end-btn{padding:9px 16px;border-radius:8px;border:1.5px solid #ff4444;background:none;font-size:12px;font-weight:600;cursor:pointer;color:#ff4444;white-space:nowrap;}
+.end-btn:active{background:#1a0f0f;}
+
+/* NUDGE */
+.nudge-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:20px;}
+.nudge-overlay.active{display:flex;}
+.nudge-title{font-size:24px;font-weight:300;color:#e8e8e8;text-align:center;}
+.nudge-sub{font-size:14px;color:#555;text-align:center;line-height:1.7;max-width:280px;}
+.breath-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.breath-circ{width:72px;height:72px;border-radius:50%;background:#111;border:1.5px solid #2a2a2a;animation:breathe 4s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);border-color:#2a2a2a;}50%{transform:scale(1.35);border-color:#00c896;}}
+.breath-lbl{font-size:11px;color:#444;letter-spacing:0.12em;text-transform:uppercase;}
+.nudge-qs{width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;}
+.nudge-ql{font-size:12px;color:#444;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.nudge-yn{display:flex;gap:8px;}
+.nyn{flex:1;padding:13px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:13px;font-weight:600;cursor:pointer;color:#555;transition:background 0.15s,border-color 0.15s,color 0.15s;}
+.nyn.ys{background:#0d1a0f;border-color:#00c896;color:#00c896;}
+.nyn.ns{background:#1a0f0f;border-color:#ff4444;color:#ff4444;}
+.nudge-dismiss{width:100%;max-width:320px;padding:16px;border-radius:10px;border:none;background:#1e1e1e;color:#555;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.nudge-dismiss.go{background:#00c896;color:#000;}
+
+/* SHARED */
+.wrap{flex:1;display:flex;flex-direction:column;padding:20px;gap:16px;}
+.sec-lbl{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#444;margin-bottom:10px;}
+.field-lbl{font-size:11px;color:#444;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.ynrow{display:flex;gap:8px;}
+.ynb{flex:1;padding:13px 8px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:13px;font-weight:600;cursor:pointer;color:#555;transition:background 0.15s,border-color 0.15s,color 0.15s;}
+.ynb.ys{background:#0d1a0f;border-color:#00c896;color:#00c896;}
+.ynb.ns{background:#1a0f0f;border-color:#ff4444;color:#ff4444;}
+.big-btn{width:100%;padding:17px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:opacity 0.15s,transform 0.1s;}
+.big-btn:active{transform:scale(0.98);opacity:0.85;}
+.big-btn.green{background:#00c896;color:#000;}
+.big-btn.dim{background:#1e1e1e;color:#444;}
+
+/* PRE-TRADE */
+.pre-header{padding:28px 20px 0;display:flex;flex-direction:column;gap:6px;}
+.pre-title{font-size:26px;font-weight:300;color:#e8e8e8;letter-spacing:-0.01em;}
+.pre-sub{font-size:13px;color:#444;line-height:1.6;}
+.mantra{background:#111;border:1px solid #1e1e1e;border-left:3px solid #ff4444;border-radius:0 8px 8px 0;padding:14px 16px;font-size:13px;color:#aa6666;line-height:1.6;font-style:italic;}
+
+/* SESSION TYPE */
+.sess-type-row{display:flex;gap:8px;}
+.stype-btn{
+  flex:1;padding:14px 6px;border-radius:10px;border:1.5px solid #1e1e1e;
+  background:#111;cursor:pointer;text-align:center;
+  transition:background 0.15s,border-color 0.15s;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.stype-icon{font-size:22px;}
+.stype-label{font-size:12px;font-weight:600;color:#555;transition:color 0.15s;}
+.stype-sub{font-size:10px;color:#333;transition:color 0.15s;}
+.stype-btn.sel-am{background:#0d1218;border-color:#4a9eff;}
+.stype-btn.sel-am .stype-label{color:#4a9eff;}
+.stype-btn.sel-am .stype-sub{color:#2a5080;}
+.stype-btn.sel-ph{background:#1a1000;border-color:#f5a623;}
+.stype-btn.sel-ph .stype-label{color:#f5a623;}
+.stype-btn.sel-ph .stype-sub{color:#6a4010;}
+.stype-btn.sel-other{background:#161616;border-color:#555;}
+.stype-btn.sel-other .stype-label{color:#aaa;}
+.stype-btn.sel-other .stype-sub{color:#444;}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:8px;}
+.chk-item{display:flex;align-items:center;gap:12px;background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:13px 14px;cursor:pointer;transition:background 0.15s,border-color 0.15s;user-select:none;}
+.chk-item.done{background:#0d1a0f;border-color:#1a3020;}
+.chk-box{width:22px;height:22px;border-radius:5px;border:1.5px solid #333;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:background 0.2s,border-color 0.2s;}
+.chk-item.done .chk-box{background:#00c896;border-color:#00c896;color:#000;}
+.chk-txt{font-size:14px;color:#ccc;line-height:1.3;}
+.chk-item.done .chk-txt{color:#4a7a5e;}
+
+/* MOOD */
+.mood-row{display:flex;gap:8px;}
+.mood-btn{flex:1;padding:12px 4px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:12px;font-weight:600;cursor:pointer;color:#555;text-align:center;transition:background 0.15s,border-color 0.15s,color 0.15s;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.mood-btn .mi{font-size:20px;}
+.mood-btn.sel-sharp{background:#0d1a0f;border-color:#00c896;color:#00c896;}
+.mood-btn.sel-ok{background:#1a1400;border-color:#f5a623;color:#f5a623;}
+.mood-btn.sel-off{background:#1a0f0f;border-color:#ff4444;color:#ff4444;}
+
+/* PROTOCOL */
+.pwrap{flex:1;display:flex;flex-direction:column;padding:16px 20px 28px;gap:14px;}
+.steps{display:flex;flex-direction:column;gap:10px;}
+.step{display:flex;align-items:center;gap:14px;background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:14px 16px;cursor:pointer;transition:background 0.15s,border-color 0.15s;user-select:none;}
+.step.done{background:#0d1a0f;border-color:#1a3020;}
+.step-circ{width:32px;height:32px;border-radius:50%;border:1.5px solid #333;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#555;flex-shrink:0;transition:background 0.2s,border-color 0.2s,color 0.2s;}
+.step.done .step-circ{background:#00c896;border-color:#00c896;color:#000;font-size:16px;}
+.step-txt{font-size:14px;line-height:1.4;color:#ccc;flex:1;}
+.step.done .step-txt{color:#4a7a5e;}
+.tsec{background:#111;border:1px solid #1e1e1e;border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.tface{position:relative;width:140px;height:140px;}
+.tface svg{transform:rotate(-90deg);}
+.ttext{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.tnum{font-size:36px;font-weight:300;color:#e8e8e8;letter-spacing:0.02em;font-variant-numeric:tabular-nums;}
+.tnum.run{color:#ff6666;}.tnum.done{color:#00c896;}
+.tsub{font-size:10px;color:#444;letter-spacing:0.15em;text-transform:uppercase;margin-top:2px;}
+.tbtn{width:100%;padding:16px;border-radius:10px;border:none;font-size:15px;font-weight:600;letter-spacing:0.05em;cursor:pointer;transition:opacity 0.15s,transform 0.1s;}
+.tbtn:active{transform:scale(0.98);opacity:0.8;}
+.tbtn.start{background:#ff4444;color:#fff;}
+.tbtn.reset{background:#1e1e1e;color:#888;}
+.tbtn.ready{background:#00c896;color:#000;}
+
+/* CHECK IN */
+.cwrap{flex:1;display:flex;flex-direction:column;padding:20px;gap:16px;}
+
+/* END SESSION */
+.end-wrap{flex:1;display:flex;flex-direction:column;padding:24px 20px 32px;gap:20px;}
+.end-title{font-size:22px;font-weight:300;color:#e8e8e8;}
+.end-sub{font-size:13px;color:#444;line-height:1.6;margin-top:4px;}
+.grade-row{display:flex;gap:8px;}
+.grade-btn{flex:1;padding:16px 8px;border-radius:10px;border:1.5px solid #1e1e1e;background:#111;cursor:pointer;text-align:center;transition:background 0.15s,border-color 0.15s;}
+.grade-letter{font-size:26px;font-weight:700;color:#555;}
+.grade-sub{font-size:11px;color:#333;margin-top:2px;}
+.grade-btn.sel-a{background:#0d1a0f;border-color:#00c896;}.grade-btn.sel-a .grade-letter{color:#00c896;}
+.grade-btn.sel-b{background:#1a1400;border-color:#f5a623;}.grade-btn.sel-b .grade-letter{color:#f5a623;}
+.grade-btn.sel-c{background:#1a1400;border-color:#888;}.grade-btn.sel-c .grade-letter{color:#888;}
+.grade-btn.sel-d{background:#1a0f0f;border-color:#ff4444;}.grade-btn.sel-d .grade-letter{color:#ff4444;}
+.end-textarea{width:100%;background:#111;border:1px solid #1e1e1e;border-radius:10px;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;padding:14px;resize:none;outline:none;min-height:90px;transition:border-color 0.15s;line-height:1.5;}
+.end-textarea:focus{border-color:#555;}
+.end-textarea::placeholder{color:#333;}
+
+/* HISTORY */
+.hwrap{flex:1;display:flex;flex-direction:column;padding:20px;gap:12px;}
+.hempty{flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;color:#333;text-align:center;line-height:1.8;}
+.sess-card{background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;}
+.sess-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.sess-top-left{display:flex;flex-direction:column;gap:2px;}
+.sess-date{font-size:12px;color:#444;}
+.sess-type-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;align-self:flex-start;}
+.stb-am{background:#0d1218;color:#4a9eff;}
+.stb-ph{background:#1a1000;color:#f5a623;}
+.stb-other{background:#1a1a1a;color:#666;}
+.sess-grade{font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.sg-a{background:#0d1a0f;color:#00c896;}
+.sg-b{background:#1a1400;color:#f5a623;}
+.sg-c{background:#1a1400;color:#888;}
+.sg-d{background:#1a0f0f;color:#ff4444;}
+.sess-meta{font-size:12px;color:#444;display:flex;gap:12px;flex-wrap:wrap;}
+.sess-fix{font-size:12px;color:#555;line-height:1.5;border-top:1px solid #1a1a1a;padding-top:8px;}
+.sess-fix span{color:#333;}
+.compliance-box{background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:16px;}
+.c-lbl{font-size:10px;color:#444;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+.c-num{font-size:30px;font-weight:300;color:#e8e8e8;}
+.c-sub{font-size:11px;color:#444;margin-top:2px;}
+.btrack{margin-top:10px;height:4px;background:#1e1e1e;border-radius:2px;overflow:hidden;}
+.bfill{height:100%;background:#00c896;border-radius:2px;transition:width 0.5s ease;}
+.clr-btn{padding:12px;border-radius:8px;border:1px solid #1e1e1e;background:none;color:#2a2a2a;font-size:13px;cursor:pointer;width:100%;}
+</style>
+</head>
+<body>
+
+<!-- NUDGE OVERLAY -->
+<div class="nudge-overlay" id="nudgeOverlay">
+  <div class="nudge-title">15-min check-in</div>
+  <div class="nudge-sub">Step back. One breath. How are you right now?</div>
+  <div class="breath-wrap">
+    <div class="breath-circ"></div>
+    <div class="breath-lbl">breathe</div>
+  </div>
+  <div class="nudge-qs">
+    <div>
+      <div class="nudge-ql">Following my rules?</div>
+      <div class="nudge-yn">
+        <button class="nyn" id="nq1y" onclick="setNA(1,'y')">Yes</button>
+        <button class="nyn" id="nq1n" onclick="setNA(1,'n')">No</button>
+      </div>
+    </div>
+    <div>
+      <div class="nudge-ql">Forcing anything?</div>
+      <div class="nudge-yn">
+        <button class="nyn" id="nq2y" onclick="setNA(2,'y')">Yes</button>
+        <button class="nyn" id="nq2n" onclick="setNA(2,'n')">No</button>
+      </div>
+    </div>
+  </div>
+  <button class="nudge-dismiss" id="nudgeDismiss" onclick="dismissNudge()">Back to trading</button>
+</div>
+
+<!-- PRE-TRADE VIEW -->
+<div class="view active" id="view-pre">
+  <div class="pre-header">
+    <div class="pre-title">Good morning.</div>
+    <div class="pre-sub">Before you touch the charts — one minute.</div>
+  </div>
+  <div class="wrap">
+    <div class="mantra">"Skip the protocol and tomorrow I feel sick — time wasted, money gone, that doubt creeping back. Is it worth it?"</div>
+
+    <!-- SESSION TYPE -->
+    <div>
+      <div class="sec-lbl">Which session?</div>
+      <div class="sess-type-row">
+        <button class="stype-btn" id="st-am" onclick="setSessionType('am')">
+          <span class="stype-icon">🌅</span>
+          <span class="stype-label">AM</span>
+          <span class="stype-sub">Open session</span>
+        </button>
+        <button class="stype-btn" id="st-ph" onclick="setSessionType('ph')">
+          <span class="stype-icon">⚡</span>
+          <span class="stype-label">Power Hour</span>
+          <span class="stype-sub">3–4pm</span>
+        </button>
+        <button class="stype-btn" id="st-other" onclick="setSessionType('other')">
+          <span class="stype-icon">📍</span>
+          <span class="stype-label">Other</span>
+          <span class="stype-sub">Midday etc.</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div>
+      <div class="sec-lbl">Pre-trade checklist</div>
+      <div class="checklist">
+        <div class="chk-item" id="ck0" onclick="toggleChk(0)"><div class="chk-box" id="cb0"></div><div class="chk-txt">Chart levels and AOIs marked</div></div>
+        <div class="chk-item" id="ck1" onclick="toggleChk(1)"><div class="chk-box" id="cb1"></div><div class="chk-txt">Bias and theme identified</div></div>
+        <div class="chk-item" id="ck2" onclick="toggleChk(2)"><div class="chk-box" id="cb2"></div><div class="chk-txt">Scenarios A and B defined</div></div>
+        <div class="chk-item" id="ck3" onclick="toggleChk(3)"><div class="chk-box" id="cb3"></div><div class="chk-txt">Daily max loss set on account</div></div>
+        <div class="chk-item" id="ck4" onclick="toggleChk(4)"><div class="chk-box" id="cb4"></div><div class="chk-txt">Read today's non-negotiables</div></div>
+      </div>
+    </div>
+
+    <!-- MOOD -->
+    <div>
+      <div class="sec-lbl">How are you feeling?</div>
+      <div class="mood-row">
+        <button class="mood-btn" id="mood-sharp" onclick="setMood('sharp')">
+          <span class="mi">🎯</span><span>Sharp</span>
+        </button>
+        <button class="mood-btn" id="mood-ok" onclick="setMood('ok')">
+          <span class="mi">😐</span><span>OK</span>
+        </button>
+        <button class="mood-btn" id="mood-off" onclick="setMood('off')">
+          <span class="mi">⚡</span><span>Off / Rushed</span>
+        </button>
+      </div>
+      <div id="mood-warning" style="display:none;margin-top:10px;padding:12px 14px;background:#1a0f0f;border:1px solid #2a1515;border-radius:8px;font-size:12px;color:#884444;line-height:1.6;">
+        You're feeling off or rushed. Highest-confluence setups only today — or sit it out.
+      </div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:8px;">
+      <button class="big-btn dim" id="startBtn" onclick="startSession()">I'm Ready to Trade</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE SESSION VIEW -->
+<div class="view" id="view-session">
+  <nav class="nav">
+    <button class="nav-btn active" id="nb-protocol" onclick="showTab('protocol',this)">Protocol</button>
+    <button class="nav-btn" id="nb-checkin" onclick="showTab('checkin',this)">Check in</button>
+    <button class="nav-btn" id="nb-history" onclick="showTab('history',this)">History</button>
+  </nav>
+  <div class="sbar">
+    <div class="sbar-left">
+      <div class="sbar-lbl" id="sbarLbl">AM Session running</div>
+      <div class="sbar-time" id="sbarTime">00:00</div>
+      <div class="sbar-next" id="sbarNext">Nudge in 15:00</div>
+    </div>
+    <button class="end-btn" onclick="goEndSession()">End Session</button>
+  </div>
+
+  <!-- PROTOCOL TAB -->
+  <div class="view active" id="tab-protocol">
+    <div class="pwrap">
+      <div class="mantra">"Skip this and tomorrow I feel sick — time wasted, money gone, that doubt creeping back. Is it worth it?"</div>
+      <div class="sec-lbl" style="margin-bottom:0;">After any loss — in order</div>
+      <div class="steps">
+        <div class="step" id="s0" onclick="toggleStep(0)"><div class="step-circ" id="sc0">1</div><div class="step-txt">Eyes closed. One breath.</div></div>
+        <div class="step" id="s1" onclick="toggleStep(1)"><div class="step-circ" id="sc1">2</div><div class="step-txt">5 push-ups or step outside the van.</div></div>
+        <div class="step" id="s2" onclick="toggleStep(2)"><div class="step-circ" id="sc2">3</div><div class="step-txt">Start the 5-min timer. Don't watch the chart.</div></div>
+        <div class="step" id="s3" onclick="toggleStep(3)"><div class="step-circ" id="sc3">4</div><div class="step-txt">Return only if full confluence exists.</div></div>
+      </div>
+      <div class="tsec">
+        <div class="tface">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="60" fill="none" stroke="#1e1e1e" stroke-width="8"/>
+            <circle cx="70" cy="70" r="60" fill="none" stroke="#ff4444" stroke-width="8"
+              stroke-dasharray="376.99" id="tring" stroke-dashoffset="376.99"
+              stroke-linecap="round" style="transition:stroke-dashoffset 1s linear,stroke 0.5s;"/>
+          </svg>
+          <div class="ttext">
+            <div class="tnum" id="tnum">5:00</div>
+            <div class="tsub" id="tsub">ready</div>
+          </div>
+        </div>
+        <button class="tbtn start" id="tbtn" onclick="handleTimer()">Start Timer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECK IN TAB -->
+  <div class="view" id="tab-checkin">
+    <div class="cwrap">
+      <div style="font-size:15px;color:#ccc;line-height:1.5;padding-bottom:14px;border-bottom:1px solid #1e1e1e;">After your last trade — how did it go?</div>
+      <div><div class="field-lbl">Waited for setup?</div><div class="ynrow"><button class="ynb" id="q1y" onclick="setA(1,'y')">Yes</button><button class="ynb" id="q1n" onclick="setA(1,'n')">No</button></div></div>
+      <div><div class="field-lbl">Cooldown after loss?</div><div class="ynrow"><button class="ynb" id="q2y" onclick="setA(2,'y')">Yes</button><button class="ynb" id="q2n" onclick="setA(2,'n')">No / N/A</button></div></div>
+      <div><div class="field-lbl">Let the trade run?</div><div class="ynrow"><button class="ynb" id="q3y" onclick="setA(3,'y')">Yes</button><button class="ynb" id="q3n" onclick="setA(3,'n')">No</button></div></div>
+      <div><div class="field-lbl">Outcome</div><div class="ynrow"><button class="ynb" id="q4w" onclick="setA(4,'w')">Win</button><button class="ynb" id="q4l" onclick="setA(4,'l')">Loss</button><button class="ynb" id="q4b" onclick="setA(4,'b')">BE</button></div></div>
+      <button class="big-btn dim" id="svbtn" onclick="saveCheckin()" style="margin-top:auto;">Save Trade</button>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div class="view" id="tab-history">
+    <div class="hwrap" id="hwrap-sess"></div>
+  </div>
+</div>
+
+<!-- END SESSION VIEW -->
+<div class="view" id="view-end">
+  <div class="end-wrap">
+    <div>
+      <div class="end-title">Session complete.</div>
+      <div class="end-sub" id="endMeta"></div>
+    </div>
+    <div>
+      <div class="sec-lbl">How did you execute?</div>
+      <div class="grade-row">
+        <button class="grade-btn" id="ga" onclick="setGrade('A')"><div class="grade-letter">A</div><div class="grade-sub">Nailed it</div></button>
+        <button class="grade-btn" id="gb" onclick="setGrade('B')"><div class="grade-letter">B</div><div class="grade-sub">Minor slips</div></button>
+        <button class="grade-btn" id="gc" onclick="setGrade('C')"><div class="grade-letter">C</div><div class="grade-sub">Some forcing</div></button>
+        <button class="grade-btn" id="gd" onclick="setGrade('D')"><div class="grade-letter">D</div><div class="grade-sub">Broke rules</div></button>
+      </div>
+    </div>
+    <div>
+      <div class="sec-lbl">One thing to fix next session</div>
+      <textarea class="end-textarea" id="fixNote" placeholder="Keep it to one specific thing..."></textarea>
+    </div>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px;">
+      <button class="big-btn dim" id="saveEndBtn" onclick="saveSession()">Save Session</button>
+      <button class="big-btn green" id="finishBtn" style="display:none;" onclick="finishSession()">Done — View History</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY VIEW -->
+<div class="view" id="view-history">
+  <div style="padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div style="font-size:16px;font-weight:500;color:#e8e8e8;">History</div>
+    <button onclick="showPre()" style="background:none;border:1px solid #1e1e1e;border-radius:6px;padding:6px 14px;color:#00c896;font-size:12px;font-weight:600;cursor:pointer;border-color:#1a3020;">+ New Session</button>
+  </div>
+  <div class="hwrap" id="hwrap-main"></div>
+</div>
+
+<script>
+// STATE
+let sessStart=null,sessClk=null,nudgeInt=null,nextNudge=null;
+let sessionMood=null,sessionType=null,sessionGrade=null;
+let chkDone=[false,false,false,false,false];
+let stepDone=[false,false,false,false];
+let tInt=null,tSecs=300,tState='idle';
+const ans={1:null,2:null,3:null,4:null};
+const na={1:null,2:null};
+const NUDGE=15*60*1000;
+
+const TYPE_LABELS={am:'AM',ph:'Power Hour',other:'Other'};
+const TYPE_BADGE={am:'stb-am',ph:'stb-ph',other:'stb-other'};
+const GRADE_CLASS={A:'sg-a',B:'sg-b',C:'sg-c',D:'sg-d'};
+
+// VIEW ROUTING
+function showView(id){
+  document.querySelectorAll('.view[id^="view-"]').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+}
+function showPre(){showView('pre');}
+function showHistoryView(){renderHistory('hwrap-main');showView('history');}
+
+// TAB SWITCHING
+function showTab(name,btn){
+  ['protocol','checkin','history'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='history') renderHistory('hwrap-sess');
+}
+
+// SESSION TYPE
+function setSessionType(t){
+  sessionType=t;
+  ['am','ph','other'].forEach(x=>{
+    document.getElementById('st-'+x).className='stype-btn'+(t===x?' sel-'+x:'');
+  });
+  checkPreReady();
+}
+
+// CHECKLIST
+function toggleChk(i){
+  chkDone[i]=!chkDone[i];
+  document.getElementById('ck'+i).classList.toggle('done',chkDone[i]);
+  document.getElementById('cb'+i).textContent=chkDone[i]?'✓':'';
+  checkPreReady();
+}
+
+// MOOD
+function setMood(m){
+  sessionMood=m;
+  ['sharp','ok','off'].forEach(x=>document.getElementById('mood-'+x).className='mood-btn'+(m===x?' sel-'+x:''));
+  document.getElementById('mood-warning').style.display=m==='off'?'block':'none';
+  checkPreReady();
+}
+
+function checkPreReady(){
+  const ready=chkDone.every(Boolean)&&!!sessionMood&&!!sessionType;
+  document.getElementById('startBtn').className='big-btn '+(ready?'green':'dim');
+}
+
+// START SESSION
+function startSession(){
+  if(!chkDone.every(Boolean)||!sessionMood||!sessionType){
+    alert('Choose a session type, complete the checklist, and set your mindset first.');return;
+  }
+  sessStart=Date.now();nextNudge=Date.now()+NUDGE;
+  const typeLabel=TYPE_LABELS[sessionType];
+  document.getElementById('sbarLbl').textContent=typeLabel+' session running';
+  showView('session');
+  sessClk=setInterval(tickSession,1000);
+  nudgeInt=setInterval(fireNudge,NUDGE);
+  tickSession();
+}
+
+// SESSION CLOCK
+function tickSession(){
+  if(!sessStart)return;
+  const e=Math.floor((Date.now()-sessStart)/1000);
+  const m=Math.floor(e/60),s=e%60;
+  document.getElementById('sbarTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  if(nextNudge){
+    const left=Math.max(0,Math.round((nextNudge-Date.now())/1000));
+    const nm=Math.floor(left/60),ns=left%60;
+    document.getElementById('sbarNext').textContent='Nudge in '+nm+':'+String(ns).padStart(2,'0');
+  }
+}
+
+// NUDGE
+function fireNudge(){
+  nextNudge=Date.now()+NUDGE;
+  na[1]=null;na[2]=null;
+  ['nq1y','nq1n','nq2y','nq2n'].forEach(id=>document.getElementById(id).className='nyn');
+  document.getElementById('nudgeDismiss').className='nudge-dismiss';
+  document.getElementById('nudgeOverlay').classList.add('active');
+  vibe([100,50,100,50,200]);tone();
+}
+function setNA(q,v){
+  na[q]=v;
+  if(q===1){
+    document.getElementById('nq1y').className='nyn'+(v==='y'?' ys':'');
+    document.getElementById('nq1n').className='nyn'+(v==='n'?' ns':'');
+  } else {
+    document.getElementById('nq2y').className='nyn'+(v==='y'?' ns':'');
+    document.getElementById('nq2n').className='nyn'+(v==='n'?' ys':'');
+  }
+  if(na[1]&&na[2]) document.getElementById('nudgeDismiss').className='nudge-dismiss go';
+}
+function dismissNudge(){
+  document.getElementById('nudgeOverlay').classList.remove('active');
+  if(na[2]==='y') setTimeout(()=>alert('You said you\'re forcing it.\nStep back. Wait for your setup.'),300);
+  if(na[1]||na[2]){
+    const log=JSON.parse(localStorage.getItem('nlog')||'[]');
+    log.unshift({ts:Date.now(),rules:na[1],forcing:na[2]});
+    localStorage.setItem('nlog',JSON.stringify(log));
+  }
+}
+
+// PROTOCOL STEPS
+function toggleStep(i){
+  stepDone[i]=!stepDone[i];
+  document.getElementById('s'+i).classList.toggle('done',stepDone[i]);
+  document.getElementById('sc'+i).textContent=stepDone[i]?'✓':i+1;
+}
+
+// LOSS TIMER
+function handleTimer(){tState==='running'?resetLossTimer():startLossTimer();}
+function startLossTimer(){
+  tSecs=300;tState='running';
+  document.getElementById('tbtn').textContent='Reset';
+  document.getElementById('tbtn').className='tbtn reset';
+  document.getElementById('tsub').textContent='do not watch the chart';
+  document.getElementById('tnum').className='tnum run';
+  const ring=document.getElementById('tring');
+  tInt=setInterval(()=>{
+    tSecs--;
+    const m=Math.floor(tSecs/60),s=tSecs%60;
+    document.getElementById('tnum').textContent=m+':'+String(s).padStart(2,'0');
+    ring.style.strokeDashoffset=376.99-(376.99*(1-tSecs/300));
+    if(tSecs<=0){
+      clearInterval(tInt);tState='done';
+      document.getElementById('tnum').textContent='Done';
+      document.getElementById('tnum').className='tnum done';
+      document.getElementById('tsub').textContent='full confluence only';
+      document.getElementById('tbtn').textContent='Reset';
+      document.getElementById('tbtn').className='tbtn ready';
+      ring.style.stroke='#00c896';ring.style.strokeDashoffset='0';
+      vibe([200,100,200]);tone();
+    }
+  },1000);
+}
+function resetLossTimer(){
+  clearInterval(tInt);tState='idle';tSecs=300;
+  document.getElementById('tnum').textContent='5:00';
+  document.getElementById('tnum').className='tnum';
+  document.getElementById('tsub').textContent='ready';
+  document.getElementById('tbtn').textContent='Start Timer';
+  document.getElementById('tbtn').className='tbtn start';
+  const ring=document.getElementById('tring');
+  ring.style.stroke='#ff4444';ring.style.strokeDashoffset='376.99';
+}
+
+// TRADE CHECK-IN
+function setA(q,v){
+  ans[q]=v;
+  const map={1:['q1y','q1n'],2:['q2y','q2n'],3:['q3y','q3n'],4:['q4w','q4l','q4b']};
+  map[q].forEach(id=>{
+    const sel=id.endsWith(v);
+    let cls='ynb';
+    if(sel) cls+=(q===4?(v==='w'?' ys':' ns'):(v==='y'?' ys':' ns'));
+    document.getElementById(id).className=cls;
+  });
+  document.getElementById('svbtn').className='big-btn '+(ans[1]&&ans[2]&&ans[3]&&ans[4]?'green':'dim');
+}
+function saveCheckin(){
+  if(!ans[1]||!ans[2]||!ans[3]||!ans[4])return;
+  const log=JSON.parse(localStorage.getItem('plog')||'[]');
+  log.unshift({ts:Date.now(),sessStart,waited:ans[1],cooldown:ans[2],ran:ans[3],outcome:ans[4]});
+  localStorage.setItem('plog',JSON.stringify(log));
+  [1,2,3,4].forEach(q=>ans[q]=null);
+  ['q1y','q1n','q2y','q2n','q3y','q3n','q4w','q4l','q4b'].forEach(id=>document.getElementById(id).className='ynb');
+  document.getElementById('svbtn').className='big-btn dim';
+  showTab('protocol',document.getElementById('nb-protocol'));
+}
+
+// END SESSION
+function goEndSession(){
+  clearInterval(sessClk);clearInterval(nudgeInt);
+  const dur=Math.floor((Date.now()-sessStart)/1000);
+  const m=Math.floor(dur/60),s=dur%60;
+  const log=JSON.parse(localStorage.getItem('plog')||'[]');
+  const today=log.filter(r=>r.sessStart===sessStart);
+  const typeLabel=TYPE_LABELS[sessionType]||'Session';
+  document.getElementById('endMeta').textContent=
+    typeLabel+' · '+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+' · '+today.length+' trade'+(today.length!==1?'s':'')+' logged';
+  sessionGrade=null;
+  document.getElementById('fixNote').value='';
+  ['A','B','C','D'].forEach(g=>document.getElementById('g'+g.toLowerCase()).className='grade-btn');
+  document.getElementById('saveEndBtn').className='big-btn dim';
+  document.getElementById('saveEndBtn').style.display='block';
+  document.getElementById('finishBtn').style.display='none';
+  showView('end');
+}
+
+function setGrade(g){
+  sessionGrade=g;
+  ['A','B','C','D'].forEach(x=>document.getElementById('g'+x.toLowerCase()).className='grade-btn'+(g===x?' sel-'+x.toLowerCase():''));
+  document.getElementById('saveEndBtn').className='big-btn '+(sessionGrade?'green':'dim');
+}
+
+function saveSession(){
+  if(!sessionGrade)return;
+  const sessions=JSON.parse(localStorage.getItem('sessions')||'[]');
+  const log=JSON.parse(localStorage.getItem('plog')||'[]');
+  const trades=log.filter(r=>r.sessStart===sessStart);
+  sessions.unshift({
+    ts:sessStart,end:Date.now(),
+    type:sessionType,
+    mood:sessionMood,
+    grade:sessionGrade,
+    fix:document.getElementById('fixNote').value.trim(),
+    trades:trades.length,
+    wins:trades.filter(t=>t.outcome==='w').length,
+    losses:trades.filter(t=>t.outcome==='l').length,
+    cooldownOk:trades.filter(t=>t.cooldown==='y').length
+  });
+  localStorage.setItem('sessions',JSON.stringify(sessions));
+  document.getElementById('saveEndBtn').style.display='none';
+  document.getElementById('finishBtn').style.display='block';
+}
+
+function finishSession(){
+  // reset all state
+  sessStart=null;sessionMood=null;sessionType=null;sessionGrade=null;
+  chkDone=[false,false,false,false,false];
+  stepDone=[false,false,false,false];
+  [0,1,2,3,4].forEach(i=>{
+    const ck=document.getElementById('ck'+i);
+    const cb=document.getElementById('cb'+i);
+    if(ck) ck.classList.remove('done');
+    if(cb) cb.textContent='';
+  });
+  [0,1,2,3].forEach(i=>{
+    document.getElementById('s'+i).classList.remove('done');
+    document.getElementById('sc'+i).textContent=i+1;
+  });
+  ['am','ph','other'].forEach(x=>document.getElementById('st-'+x).className='stype-btn');
+  ['sharp','ok','off'].forEach(x=>document.getElementById('mood-'+x).className='mood-btn');
+  document.getElementById('mood-warning').style.display='none';
+  document.getElementById('startBtn').className='big-btn dim';
+  resetLossTimer();
+  showHistoryView();
+}
+
+// HISTORY
+function renderHistory(cid){
+  const wrap=document.getElementById(cid);
+  if(!wrap)return;
+  const sessions=JSON.parse(localStorage.getItem('sessions')||'[]');
+  if(!sessions.length){
+    wrap.innerHTML='<div class="hempty">No sessions yet.<br>Complete your first session<br>to see history here.</div>';
+    return;
+  }
+  const total=sessions.length;
+  const good=sessions.filter(s=>s.grade==='A'||s.grade==='B').length;
+  const pct=Math.round((good/total)*100);
+
+  // per-type breakdown
+  const types=['am','ph','other'];
+  let typeBreakdown='';
+  types.forEach(t=>{
+    const ts=sessions.filter(s=>s.type===t);
+    if(!ts.length)return;
+    const tgood=ts.filter(s=>s.grade==='A'||s.grade==='B').length;
+    const tpct=Math.round((tgood/ts.length)*100);
+    typeBreakdown+=`<span>${TYPE_LABELS[t]}: ${tpct}% A/B (${ts.length})</span>`;
+  });
+
+  let h=`<div class="compliance-box">
+    <div class="c-lbl">A/B execution rate</div>
+    <div class="c-num">${pct}%</div>
+    <div class="c-sub">${good} of ${total} sessions graded A or B</div>
+    <div class="btrack"><div class="bfill" style="width:${pct}%"></div></div>
+    ${typeBreakdown?`<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#444;">${typeBreakdown}</div>`:''}
+  </div>`;
+
+  sessions.forEach(s=>{
+    const d=new Date(s.ts);
+    const ds=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+    const dur=Math.floor((s.end-s.ts)/1000);
+    const dm=Math.floor(dur/60);
+    const moodLabel={sharp:'Sharp 🎯',ok:'OK 😐',off:'Off ⚡'}[s.mood]||'';
+    const cdPct=s.trades>0?Math.round((s.cooldownOk/s.trades)*100):null;
+    const typeBadge=TYPE_BADGE[s.type]||'stb-other';
+    const typeLabel=TYPE_LABELS[s.type]||'Session';
+    h+=`<div class="sess-card">
+      <div class="sess-top">
+        <div class="sess-top-left">
+          <div class="sess-date">${ds} · ${dm}min</div>
+          <span class="sess-type-badge ${typeBadge}">${typeLabel}</span>
+        </div>
+        <span class="sess-grade ${GRADE_CLASS[s.grade]||''}">${s.grade}</span>
+      </div>
+      <div class="sess-meta">
+        <span>${moodLabel}</span>
+        <span>${s.trades} trade${s.trades!==1?'s':''} · ${s.wins}W ${s.losses}L</span>
+        ${cdPct!==null?`<span>Cooldown ${cdPct}%</span>`:''}
+      </div>
+      ${s.fix?`<div class="sess-fix"><span>Fix: </span>${s.fix}</div>`:''}
+    </div>`;
+  });
+  h+=`<button class="clr-btn" onclick="clearHistory('${cid}')">Clear history</button>`;
+  wrap.innerHTML=h;
+}
+
+function clearHistory(cid){
+  if(confirm('Clear all history?')){
+    localStorage.removeItem('sessions');
+    localStorage.removeItem('plog');
+    localStorage.removeItem('nlog');
+    renderHistory(cid);
+  }
+}
+
+function tone(){
+  try{
+    const c=new(window.AudioContext||window.webkitAudioContext)();
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.frequency.value=440;o.type='sine';
+    g.gain.setValueAtTime(0.25,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.7);
+    o.start(c.currentTime);o.stop(c.currentTime+0.7);
+  }catch(e){}
+}
+function vibe(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
+</script>
+</body>
+</html>
