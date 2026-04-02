@@ -10,11 +10,17 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden;}
+
+/* VIEWS */
 .view{display:none;flex-direction:column;flex:1;overflow-y:auto;}
 .view.active{display:flex;}
+
+/* TOP NAV (used in session + history) */
 .nav{display:flex;border-bottom:1px solid #1e1e1e;background:#0d0d0d;position:sticky;top:0;z-index:10;flex-shrink:0;}
-.nav-btn{flex:1;padding:14px 4px;background:none;border:none;color:#555;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;}
+.nav-btn{flex:1;padding:13px 4px;background:none;border:none;color:#555;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;}
 .nav-btn.active{color:#e8e8e8;border-bottom-color:#e8e8e8;}
+
+/* SESSION BAR */
 .sbar{background:#111;border-bottom:1px solid #1e1e1e;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
 .sbar-left{display:flex;flex-direction:column;gap:1px;}
 .sbar-lbl{font-size:10px;color:#444;letter-spacing:0.12em;text-transform:uppercase;}
@@ -52,13 +58,21 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 .big-btn{width:100%;padding:17px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:opacity 0.15s,transform 0.1s;}
 .big-btn:active{transform:scale(0.98);opacity:0.85;}
 .big-btn.green{background:#00c896;color:#000;}
-.big-btn.dim{background:#1e1e1e;color:#444;}
+.big-btn.dim{background:#1e1e1e;color:#444;pointer-events:none;}
+.big-btn.dim-tap{background:#1e1e1e;color:#444;}
 
 /* PRE-TRADE */
-.pre-header{padding:28px 20px 0;display:flex;flex-direction:column;gap:6px;}
+.pre-header{padding:24px 20px 0;display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
 .pre-title{font-size:26px;font-weight:300;color:#e8e8e8;letter-spacing:-0.01em;}
 .pre-sub{font-size:13px;color:#444;line-height:1.6;}
 .mantra{background:#111;border:1px solid #1e1e1e;border-left:3px solid #ff4444;border-radius:0 8px 8px 0;padding:14px 16px;font-size:13px;color:#aa6666;line-height:1.6;font-style:italic;}
+
+/* YESTERDAY FIX BANNER */
+.fix-banner{background:#0f1a0f;border:1px solid #1a3020;border-left:3px solid #00c896;border-radius:0 8px 8px 0;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
+.fix-banner-lbl{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#3a6a4a;}
+.fix-banner-txt{font-size:14px;color:#7dd4aa;line-height:1.5;}
+
+/* SESSION TYPE */
 .sess-type-row{display:flex;gap:8px;}
 .stype-btn{flex:1;padding:14px 6px;border-radius:10px;border:1.5px solid #1e1e1e;background:#111;cursor:pointer;text-align:center;transition:background 0.15s,border-color 0.15s;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .stype-icon{font-size:22px;}
@@ -73,6 +87,8 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 .stype-btn.sel-other{background:#161616;border-color:#555;}
 .stype-btn.sel-other .stype-label{color:#aaa;}
 .stype-btn.sel-other .stype-sub{color:#444;}
+
+/* CHECKLIST */
 .checklist{display:flex;flex-direction:column;gap:8px;}
 .chk-item{display:flex;align-items:center;gap:12px;background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:13px 14px;cursor:pointer;transition:background 0.15s,border-color 0.15s;user-select:none;}
 .chk-item.done{background:#0d1a0f;border-color:#1a3020;}
@@ -80,6 +96,8 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 .chk-item.done .chk-box{background:#00c896;border-color:#00c896;color:#000;}
 .chk-txt{font-size:14px;color:#ccc;line-height:1.3;}
 .chk-item.done .chk-txt{color:#4a7a5e;}
+
+/* MOOD */
 .mood-row{display:flex;gap:8px;}
 .mood-btn{flex:1;padding:12px 4px;border-radius:8px;border:1.5px solid #1e1e1e;background:#111;font-size:12px;font-weight:600;cursor:pointer;color:#555;text-align:center;transition:background 0.15s,border-color 0.15s,color 0.15s;display:flex;flex-direction:column;align-items:center;gap:4px;}
 .mood-btn .mi{font-size:20px;}
@@ -87,21 +105,34 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 .mood-btn.sel-ok{background:#1a1400;border-color:#f5a623;color:#f5a623;}
 .mood-btn.sel-off{background:#1a0f0f;border-color:#ff4444;color:#ff4444;}
 
-/* PROTOCOL */
+/* PROTOCOL STEPS — forced progression */
 .pwrap{flex:1;display:flex;flex-direction:column;padding:16px 20px 28px;gap:14px;}
-.steps{display:flex;flex-direction:column;gap:10px;}
-.step{display:flex;align-items:center;gap:14px;background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:14px 16px;cursor:pointer;transition:background 0.15s,border-color 0.15s;user-select:none;}
-.step.done{background:#0d1a0f;border-color:#1a3020;}
-.step-circ{width:32px;height:32px;border-radius:50%;border:1.5px solid #333;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#555;flex-shrink:0;transition:background 0.2s,border-color 0.2s,color 0.2s;}
-.step.done .step-circ{background:#00c896;border-color:#00c896;color:#000;font-size:16px;}
-.step-txt{font-size:14px;line-height:1.4;color:#ccc;flex:1;}
-.step.done .step-txt{color:#4a7a5e;}
+.steps{display:flex;flex-direction:column;gap:8px;}
+.step{display:flex;align-items:center;gap:14px;border-radius:10px;padding:14px 16px;transition:background 0.15s,border-color 0.15s,opacity 0.2s;}
+.step.unlocked{background:#111;border:1px solid #1e1e1e;cursor:pointer;user-select:none;}
+.step.unlocked:active{background:#161616;}
+.step.done-step{background:#0d1a0f;border:1px solid #1a3020;cursor:pointer;}
+.step.locked{background:#0a0a0a;border:1px solid #141414;opacity:0.4;pointer-events:none;}
+.step-circ{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;transition:background 0.2s,border-color 0.2s,color 0.2s;}
+.step.unlocked .step-circ{border:1.5px solid #555;color:#555;}
+.step.done-step .step-circ{background:#00c896;border:1.5px solid #00c896;color:#000;font-size:16px;}
+.step.locked .step-circ{border:1.5px solid #222;color:#333;}
+.step-txt{font-size:14px;line-height:1.4;flex:1;}
+.step.unlocked .step-txt{color:#ccc;}
+.step.done-step .step-txt{color:#4a7a5e;}
+.step.locked .step-txt{color:#333;}
+.step-hint{font-size:11px;margin-top:2px;}
+.step.unlocked .step-hint{color:#444;}
+.step-body{display:flex;flex-direction:column;}
+
+/* Timer */
 .tsec{background:#111;border:1px solid #1e1e1e;border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.tsec.locked-timer{opacity:0.35;pointer-events:none;}
 .tface{position:relative;width:140px;height:140px;}
 .tface svg{transform:rotate(-90deg);}
 .ttext{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
 .tnum{font-size:36px;font-weight:300;color:#e8e8e8;letter-spacing:0.02em;font-variant-numeric:tabular-nums;}
-.tnum.run{color:#ff6666;}.tnum.done{color:#00c896;}
+.tnum.run{color:#ff6666;}.tnum.tdone{color:#00c896;}
 .tsub{font-size:10px;color:#444;letter-spacing:0.15em;text-transform:uppercase;margin-top:2px;}
 .tbtn{width:100%;padding:16px;border-radius:10px;border:none;font-size:15px;font-weight:600;letter-spacing:0.05em;cursor:pointer;transition:opacity 0.15s,transform 0.1s;}
 .tbtn:active{transform:scale(0.98);opacity:0.8;}
@@ -154,6 +185,11 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 .btrack{margin-top:10px;height:4px;background:#1e1e1e;border-radius:2px;overflow:hidden;}
 .bfill{height:100%;background:#00c896;border-radius:2px;transition:width 0.5s ease;}
 .clr-btn{padding:12px;border-radius:8px;border:1px solid #1e1e1e;background:none;color:#2a2a2a;font-size:13px;cursor:pointer;width:100%;}
+
+/* GLOBAL HISTORY NAV */
+.global-nav{display:flex;border-bottom:1px solid #1e1e1e;background:#0d0d0d;flex-shrink:0;}
+.global-nav-btn{flex:1;padding:13px 4px;background:none;border:none;color:#555;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;}
+.global-nav-btn.active{color:#e8e8e8;border-bottom-color:#e8e8e8;}
 </style>
 </head>
 <body>
@@ -162,10 +198,7 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 <div class="nudge-overlay" id="nudgeOverlay">
   <div class="nudge-title">15-min check-in</div>
   <div class="nudge-sub">Step back. One breath. How are you right now?</div>
-  <div class="breath-wrap">
-    <div class="breath-circ"></div>
-    <div class="breath-lbl">breathe</div>
-  </div>
+  <div class="breath-wrap"><div class="breath-circ"></div><div class="breath-lbl">breathe</div></div>
   <div class="nudge-qs">
     <div>
       <div class="nudge-ql">Following my rules?</div>
@@ -185,14 +218,26 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
   <button class="nudge-dismiss" id="nudgeDismiss" onclick="dismissNudge()">Back to trading</button>
 </div>
 
-<!-- PRE-TRADE VIEW -->
+<!-- ═══════════════════════════════════════════ -->
+<!-- PRE-TRADE VIEW                             -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="view active" id="view-pre">
   <div class="pre-header">
     <div class="pre-title">Good morning.</div>
     <div class="pre-sub">Before you touch the charts — one minute.</div>
   </div>
   <div class="wrap">
+
+    <!-- YESTERDAY'S FIX (shown if exists) -->
+    <div id="fixBanner" style="display:none;">
+      <div class="fix-banner">
+        <div class="fix-banner-lbl">Yesterday you said to fix</div>
+        <div class="fix-banner-txt" id="fixBannerTxt"></div>
+      </div>
+    </div>
+
     <div class="mantra">"Skip the protocol and tomorrow I feel sick — time wasted, money gone, that doubt creeping back. Is it worth it?"</div>
+
     <div>
       <div class="sec-lbl">Which session?</div>
       <div class="sess-type-row">
@@ -207,6 +252,7 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
         </button>
       </div>
     </div>
+
     <div>
       <div class="sec-lbl">Pre-trade checklist</div>
       <div class="checklist">
@@ -217,6 +263,7 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
         <div class="chk-item" id="ck4" onclick="toggleChk(4)"><div class="chk-box" id="cb4"></div><div class="chk-txt">Read today's non-negotiables</div></div>
       </div>
     </div>
+
     <div>
       <div class="sec-lbl">How are you feeling?</div>
       <div class="mood-row">
@@ -228,18 +275,21 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
         You're feeling off or rushed. Highest-confluence setups only today — or sit it out.
       </div>
     </div>
+
     <div style="margin-top:auto;padding-top:8px;">
       <button class="big-btn dim" id="startBtn" onclick="startSession()">I'm Ready to Trade</button>
     </div>
   </div>
 </div>
 
-<!-- LIVE SESSION VIEW -->
+<!-- ═══════════════════════════════════════════ -->
+<!-- LIVE SESSION VIEW                          -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="view" id="view-session">
   <nav class="nav">
     <button class="nav-btn active" id="nb-protocol" onclick="showTab('protocol',this)">Protocol</button>
     <button class="nav-btn" id="nb-checkin" onclick="showTab('checkin',this)">Check in</button>
-    <button class="nav-btn" id="nb-history" onclick="showTab('history',this)">History</button>
+    <button class="nav-btn" id="nb-hist-sess" onclick="showTab('hist-sess',this)">History</button>
   </nav>
   <div class="sbar">
     <div class="sbar-left">
@@ -254,14 +304,15 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
   <div class="view active" id="tab-protocol">
     <div class="pwrap">
       <div class="mantra">"Skip this and tomorrow I feel sick — time wasted, money gone, that doubt creeping back. Is it worth it?"</div>
-      <div class="sec-lbl" style="margin-bottom:0;">After any loss — in order</div>
-      <div class="steps">
-        <div class="step" id="s0" onclick="toggleStep(0)"><div class="step-circ" id="sc0">1</div><div class="step-txt">Eyes closed. One breath.</div></div>
-        <div class="step" id="s1" onclick="toggleStep(1)"><div class="step-circ" id="sc1">2</div><div class="step-txt">5 push-ups or step outside the van.</div></div>
-        <div class="step" id="s2" onclick="toggleStep(2)"><div class="step-circ" id="sc2">3</div><div class="step-txt">Start the 5-min timer. Don't watch the chart.</div></div>
-        <div class="step" id="s3" onclick="toggleStep(3)"><div class="step-circ" id="sc3">4</div><div class="step-txt">Return only if full confluence exists.</div></div>
+      <div class="sec-lbl" style="margin-bottom:0;">After any loss — tap each step when done</div>
+
+      <div class="steps" id="stepsList">
+        <!-- Steps rendered by JS -->
       </div>
-      <div class="tsec">
+
+      <!-- Timer — locked until all steps done -->
+      <div class="tsec locked-timer" id="timerSection">
+        <div style="font-size:11px;color:#444;letter-spacing:0.1em;text-transform:uppercase;text-align:center;" id="timerLockMsg">Complete all 4 steps to unlock timer</div>
         <div class="tface">
           <svg width="140" height="140" viewBox="0 0 140 140">
             <circle cx="70" cy="70" r="60" fill="none" stroke="#1e1e1e" stroke-width="8"/>
@@ -276,6 +327,9 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
         </div>
         <button class="tbtn start" id="tbtn" onclick="handleTimer()">Start Timer</button>
       </div>
+
+      <!-- Reset steps button -->
+      <button onclick="resetSteps()" style="background:none;border:1px solid #1e1e1e;border-radius:8px;padding:10px;color:#333;font-size:12px;cursor:pointer;width:100%;">Reset steps for next loss</button>
     </div>
   </div>
 
@@ -287,17 +341,19 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
       <div><div class="field-lbl">Cooldown after loss?</div><div class="ynrow"><button class="ynb" id="q2y" onclick="setA(2,'y')">Yes</button><button class="ynb" id="q2n" onclick="setA(2,'n')">No / N/A</button></div></div>
       <div><div class="field-lbl">Let the trade run?</div><div class="ynrow"><button class="ynb" id="q3y" onclick="setA(3,'y')">Yes</button><button class="ynb" id="q3n" onclick="setA(3,'n')">No</button></div></div>
       <div><div class="field-lbl">Outcome</div><div class="ynrow"><button class="ynb" id="q4w" onclick="setA(4,'w')">Win</button><button class="ynb" id="q4l" onclick="setA(4,'l')">Loss</button><button class="ynb" id="q4b" onclick="setA(4,'b')">BE</button></div></div>
-      <button class="big-btn dim" id="svbtn" onclick="saveCheckin()" style="margin-top:auto;">Save Trade</button>
+      <button class="big-btn dim-tap" id="svbtn" onclick="saveCheckin()" style="margin-top:auto;">Save Trade</button>
     </div>
   </div>
 
-  <!-- HISTORY TAB -->
-  <div class="view" id="tab-history">
+  <!-- HISTORY TAB (in session) -->
+  <div class="view" id="tab-hist-sess">
     <div class="hwrap" id="hwrap-sess"></div>
   </div>
 </div>
 
-<!-- END SESSION VIEW -->
+<!-- ═══════════════════════════════════════════ -->
+<!-- END SESSION VIEW                           -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="view" id="view-end">
   <div class="end-wrap">
     <div>
@@ -318,17 +374,19 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
       <textarea class="end-textarea" id="fixNote" placeholder="Keep it to one specific thing..."></textarea>
     </div>
     <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px;">
-      <button class="big-btn dim" id="saveEndBtn" onclick="saveSession()">Save Session</button>
+      <button class="big-btn dim-tap" id="saveEndBtn" onclick="saveSession()">Save Session</button>
       <button class="big-btn green" id="finishBtn" style="display:none;" onclick="finishSession()">Done — View History</button>
     </div>
   </div>
 </div>
 
-<!-- HISTORY VIEW -->
+<!-- ═══════════════════════════════════════════ -->
+<!-- HISTORY VIEW (standalone, always accessible) -->
+<!-- ═══════════════════════════════════════════ -->
 <div class="view" id="view-history">
-  <div style="padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-    <div style="font-size:16px;font-weight:500;color:#e8e8e8;">History</div>
-    <button onclick="showPre()" style="background:none;border:1px solid #1a3020;border-radius:6px;padding:6px 14px;color:#00c896;font-size:12px;font-weight:600;cursor:pointer;">+ New Session</button>
+  <div class="global-nav">
+    <button class="global-nav-btn active" id="gnb-history" onclick="showGlobalTab('history',this)">History</button>
+    <button class="global-nav-btn" id="gnb-new" onclick="showPre()">+ New Session</button>
   </div>
   <div class="hwrap" id="hwrap-main"></div>
 </div>
@@ -338,369 +396,403 @@ body{background:#0d0d0d;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFo
 var sessStart=null, masterClk=null;
 var sessionMood=null, sessionType=null, sessionGrade=null;
 var chkDone=[false,false,false,false,false];
-var stepDone=[false,false,false,false];
 var tInt=null, tSecs=300, tState='idle';
 var ans={1:null,2:null,3:null,4:null};
 var na={1:null,2:null};
-
-// Nudge state
-var NUDGE_MS = 15 * 60 * 1000; // 15 minutes
-var nextNudgeAt = null;
-var nudgeShowing = false;
+var NUDGE_MS=15*60*1000;
+var nextNudgeAt=null, nudgeShowing=false;
 
 var TYPE_LABELS={am:'AM',ph:'Power Hour',other:'Other'};
 var TYPE_BADGE={am:'stb-am',ph:'stb-ph',other:'stb-other'};
 var GRADE_CLASS={A:'sg-a',B:'sg-b',C:'sg-c',D:'sg-d'};
 
-// ── MASTER TICK (runs every second while session active) ──
-function masterTick() {
-  if (!sessStart) return;
+// Protocol steps config
+var STEPS=[
+  {txt:'Eyes closed. One breath.',     hint:'Tap when done'},
+  {txt:'5 push-ups or step outside.',  hint:'Tap when done'},
+  {txt:'Confirm you\'re ready for the timer.', hint:'Tap when done'},
+  {txt:'Return only if full confluence exists.', hint:'Tap to confirm'}
+];
+var stepDone=[false,false,false,false];
 
-  // Session clock
-  var e = Math.floor((Date.now() - sessStart) / 1000);
-  var m = Math.floor(e / 60), s = e % 60;
-  document.getElementById('sbarTime').textContent =
-    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+// ── INIT ───────────────────────────────────────────────
+window.addEventListener('load', function(){
+  renderSteps();
+  loadFixBanner();
+  // Check if we have sessions and show history, else show pre
+  var sessions = JSON.parse(localStorage.getItem('sessions')||'[]');
+  if(sessions.length > 0 && !sessStart){
+    // still show pre-trade on load, banner will show fix
+  }
+});
 
-  // Nudge countdown
-  if (nextNudgeAt) {
-    var left = Math.max(0, Math.round((nextNudgeAt - Date.now()) / 1000));
-    var nm = Math.floor(left / 60), ns = left % 60;
-    document.getElementById('sbarNext').textContent =
-      'Nudge in ' + nm + ':' + String(ns).padStart(2,'0');
+// ── YESTERDAY FIX BANNER ──────────────────────────────
+function loadFixBanner(){
+  var sessions = JSON.parse(localStorage.getItem('sessions')||'[]');
+  if(!sessions.length) return;
+  var last = sessions[0];
+  if(!last.fix || !last.fix.trim()) return;
+  // Only show if last session was yesterday or today
+  var now = new Date();
+  var lastDate = new Date(last.ts);
+  var diffDays = Math.floor((now - lastDate) / (1000*60*60*24));
+  if(diffDays > 2) return; // don't show if more than 2 days old
+  document.getElementById('fixBannerTxt').textContent = last.fix;
+  document.getElementById('fixBanner').style.display = 'block';
+}
 
-    // Fire nudge when countdown hits zero
-    if (left === 0 && !nudgeShowing) {
-      showNudge();
-    }
+// ── MASTER TICK ────────────────────────────────────────
+function masterTick(){
+  if(!sessStart) return;
+  var e=Math.floor((Date.now()-sessStart)/1000);
+  var m=Math.floor(e/60), s=e%60;
+  document.getElementById('sbarTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  if(nextNudgeAt){
+    var left=Math.max(0,Math.round((nextNudgeAt-Date.now())/1000));
+    var nm=Math.floor(left/60), ns=left%60;
+    document.getElementById('sbarNext').textContent='Nudge in '+nm+':'+String(ns).padStart(2,'0');
+    if(left===0 && !nudgeShowing) showNudge();
   }
 }
 
 // ── VIEW ROUTING ───────────────────────────────────────
-function showView(id) {
+function showView(id){
   document.querySelectorAll('.view[id^="view-"]').forEach(function(v){v.classList.remove('active');});
   document.getElementById('view-'+id).classList.add('active');
 }
-function showPre() { showView('pre'); }
-function showHistoryView() { renderHistory('hwrap-main'); showView('history'); }
+function showPre(){ loadFixBanner(); showView('pre'); }
+function showHistoryView(){ renderHistory('hwrap-main'); showView('history'); }
 
-function showTab(name, btn) {
-  ['protocol','checkin','history'].forEach(function(t){
-    document.getElementById('tab-'+t).classList.remove('active');
+function showTab(name, btn){
+  ['protocol','checkin','hist-sess'].forEach(function(t){
+    var el=document.getElementById('tab-'+t);
+    if(el) el.classList.remove('active');
   });
-  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('#view-session .nav .nav-btn').forEach(function(b){b.classList.remove('active');});
+  var tab=document.getElementById('tab-'+name);
+  if(tab) tab.classList.add('active');
   btn.classList.add('active');
-  if (name==='history') renderHistory('hwrap-sess');
+  if(name==='hist-sess') renderHistory('hwrap-sess');
+}
+
+function showGlobalTab(name, btn){
+  document.querySelectorAll('.global-nav-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderHistory('hwrap-main');
 }
 
 // ── PRE-TRADE ──────────────────────────────────────────
-function setSessionType(t) {
-  sessionType = t;
+function setSessionType(t){
+  sessionType=t;
   ['am','ph','other'].forEach(function(x){
-    document.getElementById('st-'+x).className = 'stype-btn' + (t===x ? ' sel-'+x : '');
+    document.getElementById('st-'+x).className='stype-btn'+(t===x?' sel-'+x:'');
   });
   checkPreReady();
 }
-
-function toggleChk(i) {
-  chkDone[i] = !chkDone[i];
-  document.getElementById('ck'+i).classList.toggle('done', chkDone[i]);
-  document.getElementById('cb'+i).textContent = chkDone[i] ? '✓' : '';
+function toggleChk(i){
+  chkDone[i]=!chkDone[i];
+  document.getElementById('ck'+i).classList.toggle('done',chkDone[i]);
+  document.getElementById('cb'+i).textContent=chkDone[i]?'✓':'';
   checkPreReady();
 }
-
-function setMood(m) {
-  sessionMood = m;
+function setMood(m){
+  sessionMood=m;
   ['sharp','ok','off'].forEach(function(x){
-    document.getElementById('mood-'+x).className = 'mood-btn' + (m===x ? ' sel-'+x : '');
+    document.getElementById('mood-'+x).className='mood-btn'+(m===x?' sel-'+x:'');
   });
-  document.getElementById('mood-warning').style.display = m==='off' ? 'block' : 'none';
+  document.getElementById('mood-warning').style.display=m==='off'?'block':'none';
   checkPreReady();
 }
-
-function checkPreReady() {
-  var ready = chkDone.every(Boolean) && !!sessionMood && !!sessionType;
-  document.getElementById('startBtn').className = 'big-btn ' + (ready ? 'green' : 'dim');
+function checkPreReady(){
+  var ready=chkDone.every(Boolean)&&!!sessionMood&&!!sessionType;
+  document.getElementById('startBtn').className='big-btn '+(ready?'green':'dim');
 }
 
 // ── START SESSION ──────────────────────────────────────
-function startSession() {
-  if (!chkDone.every(Boolean) || !sessionMood || !sessionType) {
+function startSession(){
+  if(!chkDone.every(Boolean)||!sessionMood||!sessionType){
     alert('Choose a session type, complete the checklist, and set your mindset first.');
     return;
   }
-  sessStart = Date.now();
-  nextNudgeAt = Date.now() + NUDGE_MS;
-  nudgeShowing = false;
-
-  var typeLabel = TYPE_LABELS[sessionType];
-  document.getElementById('sbarLbl').textContent = typeLabel + ' session running';
-
+  sessStart=Date.now();
+  nextNudgeAt=Date.now()+NUDGE_MS;
+  nudgeShowing=false;
+  document.getElementById('sbarLbl').textContent=TYPE_LABELS[sessionType]+' session running';
   showView('session');
-
-  // Single master interval — polls every second
-  if (masterClk) clearInterval(masterClk);
-  masterClk = setInterval(masterTick, 1000);
-  masterTick(); // run immediately
+  if(masterClk) clearInterval(masterClk);
+  masterClk=setInterval(masterTick,1000);
+  masterTick();
 }
 
 // ── NUDGE ──────────────────────────────────────────────
-function showNudge() {
-  nudgeShowing = true;
-  nextNudgeAt = Date.now() + NUDGE_MS; // schedule next nudge immediately
-
-  // Reset nudge UI
-  na[1] = null; na[2] = null;
-  ['nq1y','nq1n','nq2y','nq2n'].forEach(function(id){
-    document.getElementById(id).className = 'nyn';
-  });
-  document.getElementById('nudgeDismiss').className = 'nudge-dismiss';
+function showNudge(){
+  nudgeShowing=true;
+  nextNudgeAt=Date.now()+NUDGE_MS;
+  na[1]=null; na[2]=null;
+  ['nq1y','nq1n','nq2y','nq2n'].forEach(function(id){document.getElementById(id).className='nyn';});
+  document.getElementById('nudgeDismiss').className='nudge-dismiss';
   document.getElementById('nudgeOverlay').classList.add('active');
-
-  vibe([100,50,100,50,200]);
-  tone();
+  vibe([100,50,100,50,200]); tone();
 }
-
-function setNA(q, v) {
-  na[q] = v;
-  if (q===1) {
-    document.getElementById('nq1y').className = 'nyn' + (v==='y' ? ' ys' : '');
-    document.getElementById('nq1n').className = 'nyn' + (v==='n' ? ' ns' : '');
+function setNA(q,v){
+  na[q]=v;
+  if(q===1){
+    document.getElementById('nq1y').className='nyn'+(v==='y'?' ys':'');
+    document.getElementById('nq1n').className='nyn'+(v==='n'?' ns':'');
   } else {
-    document.getElementById('nq2y').className = 'nyn' + (v==='y' ? ' ns' : '');
-    document.getElementById('nq2n').className = 'nyn' + (v==='n' ? ' ys' : '');
+    document.getElementById('nq2y').className='nyn'+(v==='y'?' ns':'');
+    document.getElementById('nq2n').className='nyn'+(v==='n'?' ys':'');
   }
-  if (na[1] && na[2]) document.getElementById('nudgeDismiss').className = 'nudge-dismiss go';
+  if(na[1]&&na[2]) document.getElementById('nudgeDismiss').className='nudge-dismiss go';
 }
-
-function dismissNudge() {
-  nudgeShowing = false;
+function dismissNudge(){
+  nudgeShowing=false;
   document.getElementById('nudgeOverlay').classList.remove('active');
-  if (na[2]==='y') {
-    setTimeout(function(){
-      alert('You said you\'re forcing it.\nStep back. Wait for your setup.');
-    }, 300);
-  }
-  if (na[1] || na[2]) {
-    var log = JSON.parse(localStorage.getItem('nlog') || '[]');
-    log.unshift({ts: Date.now(), rules: na[1], forcing: na[2]});
-    localStorage.setItem('nlog', JSON.stringify(log));
+  if(na[2]==='y') setTimeout(function(){alert('You said you\'re forcing it.\nStep back. Wait for your setup.');},300);
+  if(na[1]||na[2]){
+    var log=JSON.parse(localStorage.getItem('nlog')||'[]');
+    log.unshift({ts:Date.now(),rules:na[1],forcing:na[2]});
+    localStorage.setItem('nlog',JSON.stringify(log));
   }
 }
 
-// ── PROTOCOL STEPS ─────────────────────────────────────
-function toggleStep(i) {
-  stepDone[i] = !stepDone[i];
-  document.getElementById('s'+i).classList.toggle('done', stepDone[i]);
-  document.getElementById('sc'+i).textContent = stepDone[i] ? '✓' : i+1;
+// ── PROTOCOL STEPS (forced progression) ───────────────
+function renderSteps(){
+  var list=document.getElementById('stepsList');
+  if(!list) return;
+  var html='';
+  for(var i=0;i<STEPS.length;i++){
+    var isDone=stepDone[i];
+    var isUnlocked=i===0 || stepDone[i-1];
+    var cls=isDone?'done-step':(isUnlocked?'unlocked':'locked');
+    html+='<div class="step '+cls+'" id="step-'+i+'" onclick="tapStep('+i+')">' +
+      '<div class="step-circ" id="sc-'+i+'">'+(isDone?'✓':(i+1))+'</div>' +
+      '<div class="step-body">' +
+        '<div class="step-txt">'+STEPS[i].txt+'</div>' +
+        (!isDone&&isUnlocked?'<div class="step-hint">'+STEPS[i].hint+'</div>':'') +
+      '</div>' +
+    '</div>';
+  }
+  list.innerHTML=html;
+  updateTimerLock();
+}
+
+function tapStep(i){
+  var isUnlocked=i===0||stepDone[i-1];
+  if(!isUnlocked) return;
+  stepDone[i]=!stepDone[i];
+  // If un-ticking, also un-tick all subsequent
+  if(!stepDone[i]){
+    for(var j=i+1;j<STEPS.length;j++) stepDone[j]=false;
+  }
+  renderSteps();
+}
+
+function updateTimerLock(){
+  var allDone=stepDone.every(Boolean);
+  var sec=document.getElementById('timerSection');
+  var msg=document.getElementById('timerLockMsg');
+  if(allDone){
+    sec.classList.remove('locked-timer');
+    if(msg) msg.style.display='none';
+  } else {
+    sec.classList.add('locked-timer');
+    if(msg) msg.style.display='block';
+  }
+}
+
+function resetSteps(){
+  stepDone=[false,false,false,false];
+  resetLossTimer();
+  renderSteps();
 }
 
 // ── LOSS TIMER ─────────────────────────────────────────
-function handleTimer() {
-  tState === 'running' ? resetLossTimer() : startLossTimer();
-}
-
-function startLossTimer() {
-  tSecs = 300; tState = 'running';
-  document.getElementById('tbtn').textContent = 'Reset';
-  document.getElementById('tbtn').className = 'tbtn reset';
-  document.getElementById('tsub').textContent = 'do not watch the chart';
-  document.getElementById('tnum').className = 'tnum run';
-  var ring = document.getElementById('tring');
-  if (tInt) clearInterval(tInt);
-  tInt = setInterval(function(){
+function handleTimer(){ tState==='running'?resetLossTimer():startLossTimer(); }
+function startLossTimer(){
+  if(!stepDone.every(Boolean)) return;
+  tSecs=300; tState='running';
+  document.getElementById('tbtn').textContent='Reset';
+  document.getElementById('tbtn').className='tbtn reset';
+  document.getElementById('tsub').textContent='do not watch the chart';
+  document.getElementById('tnum').className='tnum run';
+  var ring=document.getElementById('tring');
+  if(tInt) clearInterval(tInt);
+  tInt=setInterval(function(){
     tSecs--;
-    var m = Math.floor(tSecs/60), s = tSecs%60;
-    document.getElementById('tnum').textContent = m + ':' + String(s).padStart(2,'0');
-    ring.style.strokeDashoffset = 376.99 - (376.99 * (1 - tSecs/300));
-    if (tSecs <= 0) {
-      clearInterval(tInt); tState = 'done';
-      document.getElementById('tnum').textContent = 'Done';
-      document.getElementById('tnum').className = 'tnum done';
-      document.getElementById('tsub').textContent = 'full confluence only';
-      document.getElementById('tbtn').textContent = 'Reset';
-      document.getElementById('tbtn').className = 'tbtn ready';
-      ring.style.stroke = '#00c896';
-      ring.style.strokeDashoffset = '0';
+    var m=Math.floor(tSecs/60), s=tSecs%60;
+    document.getElementById('tnum').textContent=m+':'+String(s).padStart(2,'0');
+    ring.style.strokeDashoffset=376.99-(376.99*(1-tSecs/300));
+    if(tSecs<=0){
+      clearInterval(tInt); tState='done';
+      document.getElementById('tnum').textContent='Done';
+      document.getElementById('tnum').className='tnum tdone';
+      document.getElementById('tsub').textContent='full confluence only';
+      document.getElementById('tbtn').textContent='Reset';
+      document.getElementById('tbtn').className='tbtn ready';
+      ring.style.stroke='#00c896'; ring.style.strokeDashoffset='0';
       vibe([200,100,200]); tone();
     }
-  }, 1000);
+  },1000);
 }
-
-function resetLossTimer() {
-  if (tInt) clearInterval(tInt);
-  tState = 'idle'; tSecs = 300;
-  document.getElementById('tnum').textContent = '5:00';
-  document.getElementById('tnum').className = 'tnum';
-  document.getElementById('tsub').textContent = 'ready';
-  document.getElementById('tbtn').textContent = 'Start Timer';
-  document.getElementById('tbtn').className = 'tbtn start';
-  var ring = document.getElementById('tring');
-  ring.style.stroke = '#ff4444';
-  ring.style.strokeDashoffset = '376.99';
+function resetLossTimer(){
+  if(tInt) clearInterval(tInt);
+  tState='idle'; tSecs=300;
+  document.getElementById('tnum').textContent='5:00';
+  document.getElementById('tnum').className='tnum';
+  document.getElementById('tsub').textContent='ready';
+  document.getElementById('tbtn').textContent='Start Timer';
+  document.getElementById('tbtn').className='tbtn start';
+  var ring=document.getElementById('tring');
+  ring.style.stroke='#ff4444'; ring.style.strokeDashoffset='376.99';
 }
 
 // ── TRADE CHECK-IN ─────────────────────────────────────
-function setA(q, v) {
-  ans[q] = v;
-  var map = {1:['q1y','q1n'],2:['q2y','q2n'],3:['q3y','q3n'],4:['q4w','q4l','q4b']};
+function setA(q,v){
+  ans[q]=v;
+  var map={1:['q1y','q1n'],2:['q2y','q2n'],3:['q3y','q3n'],4:['q4w','q4l','q4b']};
   map[q].forEach(function(id){
-    var sel = id.endsWith(v);
-    var cls = 'ynb';
-    if (sel) cls += (q===4 ? (v==='w' ? ' ys' : ' ns') : (v==='y' ? ' ys' : ' ns'));
-    document.getElementById(id).className = cls;
+    var sel=id.endsWith(v);
+    var cls='ynb';
+    if(sel) cls+=(q===4?(v==='w'?' ys':' ns'):(v==='y'?' ys':' ns'));
+    document.getElementById(id).className=cls;
   });
-  document.getElementById('svbtn').className = 'big-btn ' + (ans[1]&&ans[2]&&ans[3]&&ans[4] ? 'green' : 'dim');
+  var rdy=ans[1]&&ans[2]&&ans[3]&&ans[4];
+  document.getElementById('svbtn').className='big-btn '+(rdy?'green':'dim-tap');
 }
-
-function saveCheckin() {
-  if (!ans[1]||!ans[2]||!ans[3]||!ans[4]) return;
-  var log = JSON.parse(localStorage.getItem('plog') || '[]');
-  log.unshift({ts:Date.now(), sessStart:sessStart, waited:ans[1], cooldown:ans[2], ran:ans[3], outcome:ans[4]});
-  localStorage.setItem('plog', JSON.stringify(log));
+function saveCheckin(){
+  if(!ans[1]||!ans[2]||!ans[3]||!ans[4]) return;
+  var log=JSON.parse(localStorage.getItem('plog')||'[]');
+  log.unshift({ts:Date.now(),sessStart:sessStart,waited:ans[1],cooldown:ans[2],ran:ans[3],outcome:ans[4]});
+  localStorage.setItem('plog',JSON.stringify(log));
   [1,2,3,4].forEach(function(q){ans[q]=null;});
   ['q1y','q1n','q2y','q2n','q3y','q3n','q4w','q4l','q4b'].forEach(function(id){
-    document.getElementById(id).className = 'ynb';
+    document.getElementById(id).className='ynb';
   });
-  document.getElementById('svbtn').className = 'big-btn dim';
-  showTab('protocol', document.getElementById('nb-protocol'));
+  document.getElementById('svbtn').className='big-btn dim-tap';
+  showTab('protocol',document.getElementById('nb-protocol'));
 }
 
 // ── END SESSION ────────────────────────────────────────
-function goEndSession() {
-  if (masterClk) clearInterval(masterClk);
-  var dur = Math.floor((Date.now() - sessStart) / 1000);
-  var m = Math.floor(dur/60), s = dur%60;
-  var log = JSON.parse(localStorage.getItem('plog') || '[]');
-  var today = log.filter(function(r){return r.sessStart===sessStart;});
-  var typeLabel = TYPE_LABELS[sessionType] || 'Session';
-  document.getElementById('endMeta').textContent =
-    typeLabel + ' · ' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') +
-    ' · ' + today.length + ' trade' + (today.length!==1?'s':'') + ' logged';
-  sessionGrade = null;
-  document.getElementById('fixNote').value = '';
-  ['A','B','C','D'].forEach(function(g){
-    document.getElementById('g'+g.toLowerCase()).className = 'grade-btn';
-  });
-  document.getElementById('saveEndBtn').className = 'big-btn dim';
-  document.getElementById('saveEndBtn').style.display = 'block';
-  document.getElementById('finishBtn').style.display = 'none';
+function goEndSession(){
+  if(masterClk) clearInterval(masterClk);
+  var dur=Math.floor((Date.now()-sessStart)/1000);
+  var m=Math.floor(dur/60), s=dur%60;
+  var log=JSON.parse(localStorage.getItem('plog')||'[]');
+  var today=log.filter(function(r){return r.sessStart===sessStart;});
+  var typeLabel=TYPE_LABELS[sessionType]||'Session';
+  document.getElementById('endMeta').textContent=
+    typeLabel+' · '+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+
+    ' · '+today.length+' trade'+(today.length!==1?'s':'')+' logged';
+  sessionGrade=null;
+  document.getElementById('fixNote').value='';
+  ['A','B','C','D'].forEach(function(g){document.getElementById('g'+g.toLowerCase()).className='grade-btn';});
+  document.getElementById('saveEndBtn').className='big-btn dim-tap';
+  document.getElementById('saveEndBtn').style.display='block';
+  document.getElementById('finishBtn').style.display='none';
   showView('end');
 }
-
-function setGrade(g) {
-  sessionGrade = g;
+function setGrade(g){
+  sessionGrade=g;
   ['A','B','C','D'].forEach(function(x){
-    document.getElementById('g'+x.toLowerCase()).className = 'grade-btn' + (g===x ? ' sel-'+x.toLowerCase() : '');
+    document.getElementById('g'+x.toLowerCase()).className='grade-btn'+(g===x?' sel-'+x.toLowerCase():'');
   });
-  document.getElementById('saveEndBtn').className = 'big-btn ' + (sessionGrade ? 'green' : 'dim');
+  document.getElementById('saveEndBtn').className='big-btn '+(sessionGrade?'green':'dim-tap');
 }
-
-function saveSession() {
-  if (!sessionGrade) return;
-  var sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
-  var log = JSON.parse(localStorage.getItem('plog') || '[]');
-  var trades = log.filter(function(r){return r.sessStart===sessStart;});
+function saveSession(){
+  if(!sessionGrade) return;
+  var sessions=JSON.parse(localStorage.getItem('sessions')||'[]');
+  var log=JSON.parse(localStorage.getItem('plog')||'[]');
+  var trades=log.filter(function(r){return r.sessStart===sessStart;});
   sessions.unshift({
-    ts: sessStart, end: Date.now(),
-    type: sessionType, mood: sessionMood, grade: sessionGrade,
-    fix: document.getElementById('fixNote').value.trim(),
-    trades: trades.length,
-    wins: trades.filter(function(t){return t.outcome==='w';}).length,
-    losses: trades.filter(function(t){return t.outcome==='l';}).length,
-    cooldownOk: trades.filter(function(t){return t.cooldown==='y';}).length
+    ts:sessStart, end:Date.now(),
+    type:sessionType, mood:sessionMood, grade:sessionGrade,
+    fix:document.getElementById('fixNote').value.trim(),
+    trades:trades.length,
+    wins:trades.filter(function(t){return t.outcome==='w';}).length,
+    losses:trades.filter(function(t){return t.outcome==='l';}).length,
+    cooldownOk:trades.filter(function(t){return t.cooldown==='y';}).length
   });
-  localStorage.setItem('sessions', JSON.stringify(sessions));
-  document.getElementById('saveEndBtn').style.display = 'none';
-  document.getElementById('finishBtn').style.display = 'block';
+  localStorage.setItem('sessions',JSON.stringify(sessions));
+  document.getElementById('saveEndBtn').style.display='none';
+  document.getElementById('finishBtn').style.display='block';
 }
-
-function finishSession() {
-  // Reset all state
-  sessStart = null; sessionMood = null; sessionType = null; sessionGrade = null;
-  chkDone = [false,false,false,false,false];
-  stepDone = [false,false,false,false];
-  nudgeShowing = false; nextNudgeAt = null;
+function finishSession(){
+  sessStart=null; sessionMood=null; sessionType=null; sessionGrade=null;
+  chkDone=[false,false,false,false,false];
+  stepDone=[false,false,false,false];
+  nudgeShowing=false; nextNudgeAt=null;
   [0,1,2,3,4].forEach(function(i){
     var ck=document.getElementById('ck'+i), cb=document.getElementById('cb'+i);
     if(ck) ck.classList.remove('done');
     if(cb) cb.textContent='';
   });
-  [0,1,2,3].forEach(function(i){
-    document.getElementById('s'+i).classList.remove('done');
-    document.getElementById('sc'+i).textContent = i+1;
-  });
   ['am','ph','other'].forEach(function(x){document.getElementById('st-'+x).className='stype-btn';});
   ['sharp','ok','off'].forEach(function(x){document.getElementById('mood-'+x).className='mood-btn';});
-  document.getElementById('mood-warning').style.display = 'none';
-  document.getElementById('startBtn').className = 'big-btn dim';
+  document.getElementById('mood-warning').style.display='none';
+  document.getElementById('startBtn').className='big-btn dim';
   resetLossTimer();
+  renderSteps();
   showHistoryView();
 }
 
 // ── HISTORY ────────────────────────────────────────────
-function renderHistory(cid) {
-  var wrap = document.getElementById(cid);
-  if (!wrap) return;
-  var sessions = JSON.parse(localStorage.getItem('sessions') || '[]');
-  if (!sessions.length) {
-    wrap.innerHTML = '<div class="hempty">No sessions yet.<br>Complete your first session<br>to see history here.</div>';
+function renderHistory(cid){
+  var wrap=document.getElementById(cid);
+  if(!wrap) return;
+  var sessions=JSON.parse(localStorage.getItem('sessions')||'[]');
+  if(!sessions.length){
+    wrap.innerHTML='<div class="hempty">No sessions yet.<br>Complete your first session<br>to see history here.</div>';
     return;
   }
-  var total = sessions.length;
-  var good = sessions.filter(function(s){return s.grade==='A'||s.grade==='B';}).length;
-  var pct = Math.round((good/total)*100);
-
-  var typeBreakdown = '';
+  var total=sessions.length;
+  var good=sessions.filter(function(s){return s.grade==='A'||s.grade==='B';}).length;
+  var pct=Math.round((good/total)*100);
+  var typeBreakdown='';
   ['am','ph','other'].forEach(function(t){
-    var ts = sessions.filter(function(s){return s.type===t;});
-    if (!ts.length) return;
-    var tgood = ts.filter(function(s){return s.grade==='A'||s.grade==='B';}).length;
-    var tpct = Math.round((tgood/ts.length)*100);
-    typeBreakdown += '<span>' + TYPE_LABELS[t] + ': ' + tpct + '% A/B (' + ts.length + ')</span>';
+    var ts=sessions.filter(function(s){return s.type===t;});
+    if(!ts.length) return;
+    var tgood=ts.filter(function(s){return s.grade==='A'||s.grade==='B';}).length;
+    var tpct=Math.round((tgood/ts.length)*100);
+    typeBreakdown+='<span>'+TYPE_LABELS[t]+': '+tpct+'% ('+ts.length+')</span>';
   });
-
-  var h = '<div class="compliance-box">' +
-    '<div class="c-lbl">A/B execution rate</div>' +
-    '<div class="c-num">' + pct + '%</div>' +
-    '<div class="c-sub">' + good + ' of ' + total + ' sessions graded A or B</div>' +
-    '<div class="btrack"><div class="bfill" style="width:' + pct + '%"></div></div>' +
-    (typeBreakdown ? '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#444;">' + typeBreakdown + '</div>' : '') +
+  var h='<div class="compliance-box">'+
+    '<div class="c-lbl">A/B execution rate</div>'+
+    '<div class="c-num">'+pct+'%</div>'+
+    '<div class="c-sub">'+good+' of '+total+' sessions graded A or B</div>'+
+    '<div class="btrack"><div class="bfill" style="width:'+pct+'%"></div></div>'+
+    (typeBreakdown?'<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#444;">'+typeBreakdown+'</div>':'')+
     '</div>';
-
   sessions.forEach(function(s){
-    var d = new Date(s.ts);
-    var ds = d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
-    var dur = Math.floor((s.end-s.ts)/1000);
-    var dm = Math.floor(dur/60);
-    var moodLabel = {sharp:'Sharp 🎯',ok:'OK 😐',off:'Off ⚡'}[s.mood] || '';
-    var cdPct = s.trades>0 ? Math.round((s.cooldownOk/s.trades)*100) : null;
-    var typeBadge = TYPE_BADGE[s.type] || 'stb-other';
-    var typeLabel = TYPE_LABELS[s.type] || 'Session';
-    h += '<div class="sess-card">' +
-      '<div class="sess-top">' +
-        '<div class="sess-top-left">' +
-          '<div class="sess-date">' + ds + ' · ' + dm + 'min</div>' +
-          '<span class="sess-type-badge ' + typeBadge + '">' + typeLabel + '</span>' +
-        '</div>' +
-        '<span class="sess-grade ' + (GRADE_CLASS[s.grade]||'') + '">' + s.grade + '</span>' +
-      '</div>' +
-      '<div class="sess-meta">' +
-        '<span>' + moodLabel + '</span>' +
-        '<span>' + s.trades + ' trade' + (s.trades!==1?'s':'') + ' · ' + s.wins + 'W ' + s.losses + 'L</span>' +
-        (cdPct!==null ? '<span>Cooldown ' + cdPct + '%</span>' : '') +
-      '</div>' +
-      (s.fix ? '<div class="sess-fix"><span>Fix: </span>' + s.fix + '</div>' : '') +
-      '</div>';
+    var d=new Date(s.ts);
+    var ds=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+    var dur=Math.floor((s.end-s.ts)/1000);
+    var dm=Math.floor(dur/60);
+    var moodLabel={sharp:'Sharp 🎯',ok:'OK 😐',off:'Off ⚡'}[s.mood]||'';
+    var cdPct=s.trades>0?Math.round((s.cooldownOk/s.trades)*100):null;
+    var typeBadge=TYPE_BADGE[s.type]||'stb-other';
+    var typeLabel=TYPE_LABELS[s.type]||'Session';
+    h+='<div class="sess-card">'+
+      '<div class="sess-top">'+
+        '<div class="sess-top-left">'+
+          '<div class="sess-date">'+ds+' · '+dm+'min</div>'+
+          '<span class="sess-type-badge '+typeBadge+'">'+typeLabel+'</span>'+
+        '</div>'+
+        '<span class="sess-grade '+(GRADE_CLASS[s.grade]||'')+'">'+s.grade+'</span>'+
+      '</div>'+
+      '<div class="sess-meta">'+
+        '<span>'+moodLabel+'</span>'+
+        '<span>'+s.trades+' trade'+(s.trades!==1?'s':'')+' · '+s.wins+'W '+s.losses+'L</span>'+
+        (cdPct!==null?'<span>Cooldown '+cdPct+'%</span>':'')+
+      '</div>'+
+      (s.fix?'<div class="sess-fix"><span>Fix: </span>'+s.fix+'</div>':'')+
+    '</div>';
   });
-
-  h += '<button class="clr-btn" onclick="clearHistory(\'' + cid + '\')">Clear history</button>';
-  wrap.innerHTML = h;
+  h+='<button class="clr-btn" onclick="clearHistory(\''+cid+'\')">Clear history</button>';
+  wrap.innerHTML=h;
 }
-
-function clearHistory(cid) {
-  if (confirm('Clear all history?')) {
+function clearHistory(cid){
+  if(confirm('Clear all history?')){
     localStorage.removeItem('sessions');
     localStorage.removeItem('plog');
     localStorage.removeItem('nlog');
@@ -709,18 +801,18 @@ function clearHistory(cid) {
 }
 
 // ── UTILS ──────────────────────────────────────────────
-function tone() {
-  try {
-    var c = new (window.AudioContext || window.webkitAudioContext)();
-    var o = c.createOscillator(), g = c.createGain();
+function tone(){
+  try{
+    var c=new(window.AudioContext||window.webkitAudioContext)();
+    var o=c.createOscillator(), g=c.createGain();
     o.connect(g); g.connect(c.destination);
-    o.frequency.value = 440; o.type = 'sine';
-    g.gain.setValueAtTime(0.25, c.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.8);
-    o.start(c.currentTime); o.stop(c.currentTime + 0.8);
-  } catch(e) {}
+    o.frequency.value=440; o.type='sine';
+    g.gain.setValueAtTime(0.25,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.8);
+    o.start(c.currentTime); o.stop(c.currentTime+0.8);
+  }catch(e){}
 }
-function vibe(p) { try { navigator.vibrate && navigator.vibrate(p); } catch(e) {} }
+function vibe(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
 </script>
 </body>
 </html>
